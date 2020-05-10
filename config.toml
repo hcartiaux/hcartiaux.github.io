@@ -2,3 +2,9 @@ baseURL = "https://hcartiaux.github.io/"
 languageCode = "en-us"
 title = "My sysadmin notes"
 theme = "solar-theme-hugo"
+paginate = 5
+pygmentsStyle = "solarized-dark" # solarized-light, -dark or -dark256
+copyright = "CC BY-SA 4.0"
+
+[params]
+  scheme = "dark"
