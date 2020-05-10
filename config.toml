@@ -1,0 +1,4 @@
+baseURL = "https://hcartiaux.github.io/"
+languageCode = "en-us"
+title = "My sysadmin notes"
+theme = "solar-theme-hugo"
