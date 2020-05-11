@@ -3,11 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://hcartiaux.github.io/categories/</loc>
+    <loc>https://hcartiaux.github.io/</loc>
+    <lastmod>2020-05-10T17:46:06+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://hcartiaux.github.io/</loc>
+    <loc>https://hcartiaux.github.io/posts/</loc>
+    <lastmod>2020-05-10T17:46:06+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://hcartiaux.github.io/posts/lineageos-update-oneplus-6t/</loc>
+    <lastmod>2020-05-10T17:46:06+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://hcartiaux.github.io/categories/</loc>
   </url>
   
   <url>
