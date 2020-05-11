@@ -1,7 +1,7 @@
 ---
 title: "Update LineageOS from 16.0 to 17.1 on the OnePlus 6T (fajita)"
 date: 2020-05-10T17:46:06+02:00
-draft: true
+draft: false
 ---
 
 Updating from 16.0 to 17.1 on A/B devices without data loss can be tricky, especially with the OnePlus 6T...
@@ -25,7 +25,7 @@ Because of compatibility issues, we need to use [unofficial recovery builds of t
 
 * [TWRP 3.3.1-32 Pie Unofficial by mauronofrio](https://sourceforge.net/projects/mauronofrio-twrp/files/Fajita/twrp-3.3.1-32-fajita-Pie-mauronofrio.img/download)
 * [TWRP 3.3.1-32 Q Unofficial by mauronofrio](https://sourceforge.net/projects/mauronofrio-twrp/files/Fajita/twrp-3.3.1-32-fajita-Q-mauronofrio.img/download)
-i
+
 
 Downloads all these files, and start this procedure:
 
