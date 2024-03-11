@@ -1,1 +1,2 @@
-resources/_gen/assets/scss/css/
+resources/
+.hugo_build.lock
