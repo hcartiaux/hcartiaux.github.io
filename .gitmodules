@@ -1,3 +1,7 @@
 [submodule "themes/solar-theme-hugo"]
 	path = themes/solar-theme-hugo
 	url = https://github.com/hcartiaux/solar-theme-hugo
+
+[submodule "public"]
+	path = public
+	url = https://github.com/hcartiaux/hcartiaux.github.io
