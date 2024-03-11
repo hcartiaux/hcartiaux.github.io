@@ -8,3 +8,12 @@ copyright = "CC BY-SA 4.0"
 
 [params]
   scheme = "dark"
+  description = "Btw I use arch"
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/index.html"
+#  [[menu.myself]]
+#    name = "My github"
+#    url = "https://github.com/hcartiaux/"
