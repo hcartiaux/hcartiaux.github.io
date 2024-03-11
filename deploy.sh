@@ -5,6 +5,8 @@ set -e
 
 printf "\033[0;32mDeploying updates to GitHub...\033[0m\n"
 
+git submodule update --init
+
 # Build the project.
 hugo -t solar-theme-hugo # if using a theme, replace with `hugo -t <YOURTHEME>`
 
