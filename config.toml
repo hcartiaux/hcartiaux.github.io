@@ -10,10 +10,10 @@ copyright = "CC BY-SA 4.0"
   scheme = "dark"
   description = "Btw I use arch"
 
-[menu]
-  [[menu.main]]
-    name = "Home"
-    url = "/index.html"
+#[menu]
+#  [[menu.main]]
+#    name = "Home"
+#    url = "/index.html"
 #  [[menu.myself]]
 #    name = "My github"
 #    url = "https://github.com/hcartiaux/"
