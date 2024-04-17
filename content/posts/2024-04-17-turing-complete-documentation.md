@@ -3,7 +3,7 @@ title: "Turing complete - self documentation"
 date: 2024-04-17
 ---
 
-This is my documentation for my own game of [Turing Complete](https://turingcomplete.game/).
+This is my documentation for [my own game](https://turingcomplete.game/profile/38047) of [Turing Complete](https://turingcomplete.game/).
 Turing Complete purpose is to guide you through the implementation of a simple CPU, from the first logical gate to your assembly language definition.
 
 This page is mostly intended to myself as a reminder.
