@@ -15,6 +15,7 @@ It can be used alongside with `buildah` to build container images, and `skopeo` 
 
 * Install the package: `apt install podman`
 * Allow for unqualified search in the docker.io and quay.io repositories: `echo 'unqualified-search-registries=["docker.io", "quay.io"]' > $HOME/.config/containers/registries.conf`
+* Enable the auto-update timer: `systemctl --user enable --now podman-auto-update.timer`
 
 ## Image management
 
@@ -40,7 +41,6 @@ It can be used alongside with `buildah` to build container images, and `skopeo` 
 * Create a new container and map a network port: `-p <host port>:<container port>`
 * Enable Auto-update: `--label io.containers.autoupdate=registry`
 * Checking for updates: `podman auto-update`
-* Enable the auto-update timer: `systemctl --user enable --now podman-auto-update.timer`
 * Copy a file to a container: `podman cp <src> <dest>`
 * `podman [restart,start,stop,pause,unpause] <CONTAINER ID>`
 * Remove a container: `podman rm <CONTAINER ID>`
