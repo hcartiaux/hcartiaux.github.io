@@ -69,3 +69,4 @@ It can be used alongside with `buildah` to build container images, and `skopeo` 
 * https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods
 * https://www.redhat.com/sysadmin/podman-auto-updates-rollbacks
 * https://linuxhandbook.com/autostart-podman-containers/
+* https://mo8it.com/blog/quadlet/
