@@ -15,7 +15,7 @@ It can be used alongside with `buildah` to build container images, and `skopeo` 
 
 * Install the package: `apt install podman`
 * Allow for unqualified search in the docker.io and quay.io repositories: `echo 'unqualified-search-registries=["docker.io", "quay.io"]' > $HOME/.config/containers/registries.conf`
-* Enable the auto-update timer: `systemctl --user enable --now podman-auto-update.timer`
+* Enable the auto-update timer: `systemctl [--user] enable --now podman-auto-update.timer`
 
 ## Image management
 
@@ -52,13 +52,46 @@ It can be used alongside with `buildah` to build container images, and `skopeo` 
 * Generate a kube file: `podman generate kube <CONTAINER ID> > <filename>.yaml`
 * Import a kube file: `podman play kube <filename>.yaml`
 
-### Systemd units
+### Systemd units (*deprecated since podman 4.4*)
 
 * Pre-requisites: `systemctl --user enable podman-restart.service`
 
 * Generate a systemd service unit: `podman generate systemd --new <CONTAINER ID> > ~/.config/systemd/user/<CONTAINER NAME>.service`
 * Reload systemd: `systemctl --user daemon-reload`
 * Enable the container to start at boot: `systemctl --user enable <CONTAINER NAME>.service`
+
+### Quadlet
+
+Configuration directories:
+
+* `/usr/share/containers/systemd/`
+* `/etc/containers/systemd/`
+* `~/.config/containers/systemd` (*rootless*)
+
+Create a container file, in example in `.config/containers/systemd/httpd.container`:
+
+```
+[Unit]
+Description=HTTPD server
+After=local-fs.target
+
+[Container]
+Image=docker.io/library/httpd:latest
+#Exec=sleep 1000
+AutoUpdate=registry
+PublishPort=8080:80 # Port mapping
+Volume=%h/public:/var/www/ # %h is mapped to the user home dir
+Environment=ENV=prod # Environment variable
+
+[Install]
+# Start by default on boot
+WantedBy=multi-user.target default.target
+```
+
+* Reload and scan for local changes: `systemctl --user daemon-reload`
+* Show the generated service unit: `systemctl --user cat httpd`
+* Start the container: `systemctl --user start httpd`
+
 
 ## External Resources
 
@@ -70,3 +103,5 @@ It can be used alongside with `buildah` to build container images, and `skopeo` 
 * https://www.redhat.com/sysadmin/podman-auto-updates-rollbacks
 * https://linuxhandbook.com/autostart-podman-containers/
 * https://mo8it.com/blog/quadlet/
+* https://linuxconfig.org/how-to-run-podman-containers-under-systemd-with-quadlet
+
