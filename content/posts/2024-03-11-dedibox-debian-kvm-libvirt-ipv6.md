@@ -102,6 +102,7 @@ iface enp1s0 inet6 static
   address 2001:xxx:xxx:100::1
   netmask 64
   accept_ra 2
+  pre-up sleep 2
   pre-up dhclient -cf /etc/dhcp/dhclient6.conf -pf /run/dhclient6.enp1s0.pid -v -nw -6 -P enp1s0
   pre-down dhclient -x -pf /run/dhclient6.enp1s0.pid
 ```
