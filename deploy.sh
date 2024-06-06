@@ -8,29 +8,19 @@ printf "\033[0;32mDeploying updates to GitHub...\033[0m\n"
 # Submodule update
 git submodule update --init
 
-# Go To Public folder
-cd public
-git rm -rf *
-
-cd ..
 # Build the project.
-hugo -t solar-theme-hugo
-cd public
+hugo --cleanDestinationDir
 
 # Add changes to git.
-git add .
+git add public
 
 # Commit changes.
 msg="rebuilding site $(date)"
 if [ -n "$*" ]; then
-	msg="$*"
+       msg="$*"
 fi
 git commit -m "$msg"
 
 # Push source and build repos.
 git push origin master
 
-cd ..
-
-git commit -m "$msg" public
-git push origin master
