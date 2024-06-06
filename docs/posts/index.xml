@@ -24,13 +24,6 @@
       <description>&lt;p&gt;This is a cheat sheet of podman useful information and commands.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>DN42 Test bed, my own setup</title>
-      <link>https://hcartiaux.github.io/posts/2024-04-18-dn42-testbed/</link>
-      <pubDate>Thu, 18 Apr 2024 00:00:00 +0000</pubDate>
-      <guid>https://hcartiaux.github.io/posts/2024-04-18-dn42-testbed/</guid>
-      <description>&lt;p&gt;This is a description of my very own DN42 AS configuration.&lt;/p&gt;</description>
-    </item>
-    <item>
       <title>Turing complete - self documentation</title>
       <link>https://hcartiaux.github.io/posts/2024-04-17-turing-complete-documentation/</link>
       <pubDate>Wed, 17 Apr 2024 00:00:00 +0000</pubDate>
