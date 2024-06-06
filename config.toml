@@ -5,6 +5,7 @@ theme = "solar-theme-hugo"
 paginate = 5
 pygmentsStyle = "solarized-dark" # solarized-light, -dark or -dark256
 copyright = "CC BY-SA 4.0"
+publishDir = "docs"
 
 [params]
   scheme = "dark"

@@ -12,7 +12,7 @@ git submodule update --init
 hugo --cleanDestinationDir
 
 # Add changes to git.
-git add public
+git add docs
 
 # Commit changes.
 msg="rebuilding site $(date)"
