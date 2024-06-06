@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		
+
+		<title>Dedibox - set-up a virtualization server with Debian, KVM/libvirt and IPv6</title>
+
+		
+		<link rel="stylesheet" href="https://hcartiaux.github.io/css/colors-dark.min.c55872c93a117ae390d387b98ba5b7afff286ffdcd1d53581682c96415ced087.css">
+
+		
+	</head>
+	<body>
+		<header id="header">
+			<h1><a href="https://hcartiaux.github.io/">My sysadmin notes</a></h1>
+			<p>Btw I use arch</p>
+		</header>
+
+		<div id="page">
+			<div id="sidebar">
+				<nav>
+	
+</nav>
+
+			</div>
+
+			<div id="content">
+				
+	<article class="post">
+		<h1><a href="https://hcartiaux.github.io/posts/2024-03-11-dedibox-debian-kvm-libvirt-ipv6/">Dedibox - set-up a virtualization server with Debian, KVM/libvirt and IPv6</a> </h1>
+
+		<div class="post-content"><p>The objective is to set-up a virtualization server on a <a href="https://www.scaleway.com/en/dedibox/">dedibox</a> server with IPv6 support at NATed IPV4.</p>
+<p>I use this configuration as a cheap &ldquo;home lab&rdquo; virtualization server.</p>
+<p>In IPv4, the customer will buy &ldquo;failover IPs&rdquo; individually, register the virtual machines mac addresses on the web console, and bridge the host server physical network interface.
+If the server emits packets from unregistered mac addresses, the server will be flagged and put offline (as a security measure).</p>
+<p>It is not possible to register additional mac addresses without buying additional &ldquo;failover IPs&rdquo;, so we cannot bridge the physical network interface.
+Instead, we will route the IPv6 traffic and NAT the IPV4 traffic on the host server.</p>
+<ol start="0">
+<li>Buy a &ldquo;Dedibox&rdquo; server on online.net, bootstrap it with Debian 12.</li>
+</ol>
+<h2 id="network-configuration">Network configuration</h2>
+<h3 id="addressing-scheme">Addressing Scheme</h3>
+<h4 id="ipv6">IPv6</h4>
+<p>Online allocates a /48 to each customer, we will split it and create a /56 in the console.</p>
+<p><img src="dedibox_network_config.png" alt="Dedibox console IPv6"></p>
+<table>
+<thead>
+<tr>
+<th>Server name</th>
+<th>interface</th>
+<th>IPv6</th>
+<th>IPv6 GW</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Host</td>
+<td><code>enp1s0</code></td>
+<td><code>2001:xxx:xxx:100::1/64</code></td>
+<td>AUTO (RA)</td>
+</tr>
+<tr>
+<td>Host</td>
+<td><code>vmbr0</code></td>
+<td><code>2001:xxx:xxx:100::2/64</code></td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>VM1 &lt;ID=1&gt;</td>
+<td><code>enp1s0</code></td>
+<td><code>2001:xxx:xxx:100::[2+\&lt;ID&gt;]/64</code></td>
+<td><code>2001:xxx:xxx:100::2/64</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="ipv4">IPv4</h4>
+<table>
+<thead>
+<tr>
+<th>Server name</th>
+<th>interface</th>
+<th>IPv4</th>
+<th>IPv4 GW</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Host</td>
+<td>enp1s0</td>
+<td>DHCP</td>
+<td>DHCP</td>
+</tr>
+<tr>
+<td>Host</td>
+<td>vmbr0</td>
+<td><code>192.168.0.1/16</code></td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>VM1 &lt;ID=1&gt;</td>
+<td>enp1s0</td>
+<td><code>192.168.0.[2+\&lt;ID&gt;]</code></td>
+<td><code>192.168.0.1</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="system-configuration">System configuration</h3>
+<ol>
+<li>Configure DHCPv6 to request your IPv6 block, create a file <code>/etc/dhcp/dhclient6.conf</code>. Replace the client-id value by the DUID given in the console.</li>
+</ol>
+<pre tabindex="0"><code>interface &#34;enp1s0&#34; {
+send dhcp6.client-id xx:xx:xx:xx:xx:xx:xx:xx:xx:xx;
+request;
+}
+</code></pre><ol start="2">
+<li>Install <code>bridge-utils</code> (mandatory) and other convenient packages on the server</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>apt install bridge-utils
+</span></span><span style="display:flex;"><span>apt install vim tmux tcpdump dnsutils htop sudo strace git curl
+</span></span></code></pre></div><ol start="3">
+<li>Enable IPv6, and configure IPv4 and IPv6 routing</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#b58900">echo</span> ipv6                              &gt; /etc/modules-load.d/modules.conf
+</span></span><span style="display:flex;"><span><span style="color:#b58900">echo</span> options ipv6 <span style="color:#268bd2">disable</span><span style="color:#719e07">=</span><span style="color:#2aa198">0</span>            &gt; /etc/modprobe.d/local.conf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#b58900">echo</span> net.ipv6.conf.all.forwarding <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span> &gt;&gt; /etc/sysctl.d/ipv6.conf
+</span></span><span style="display:flex;"><span><span style="color:#b58900">echo</span> net.ipv6.conf.all.proxy_ndp <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>  &gt;&gt; /etc/sysctl.d/ipv6.conf
+</span></span><span style="display:flex;"><span><span style="color:#b58900">echo</span> net.ipv6.bindv6only <span style="color:#719e07">=</span> <span style="color:#2aa198">1</span>          &gt;&gt; /etc/sysctl.d/ipv6.conf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#b58900">echo</span> net.ipv4.ip_forward<span style="color:#719e07">=</span><span style="color:#2aa198">1</span>            &gt;&gt; /etc/sysctl.d/ipv4.conf
+</span></span><span style="display:flex;"><span><span style="color:#b58900">echo</span> net.ipv4.conf.all.forwarding<span style="color:#719e07">=</span><span style="color:#2aa198">1</span>   &gt;&gt; /etc/sysctl.d/ipv4.conf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sysctl -f /etc/sysctl.d/ipv6.conf
+</span></span><span style="display:flex;"><span>sysctl -f /etc/sysctl.d/ipv4.conf
+</span></span></code></pre></div><ol start="5">
+<li>In <code>/etc/network/interfaces</code>, configure the physical network interface (<code>enp1s0</code>) for IPv4 (dhcp) and IPv6.</li>
+</ol>
+<pre tabindex="0"><code># This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+allow-hotplug enp1s0
+
+# IPv4
+iface enp1s0 inet dhcp
+
+# IPv6
+iface enp1s0 inet6 static
+  address 2001:xxx:xxx:100::1
+  netmask 64
+  accept_ra 2
+  pre-up sleep 2
+  pre-up dhclient -cf /etc/dhcp/dhclient6.conf -pf /run/dhclient6.enp1s0.pid -v -nw -6 -P enp1s0
+  pre-down dhclient -x -pf /run/dhclient6.enp1s0.pid
+</code></pre><ol start="6">
+<li>Configure a network bridge <code>vmbr0</code> for the virtual machines, and set an IPv4 and IPv6 on the interface.
+At the same time, we pre-configure the IPv6 <code>2001:xxx:xxx:100::[3-7]</code> for the future VMs.</li>
+</ol>
+<pre tabindex="0"><code>auto vmbr0
+iface vmbr0 inet6 static
+  address 2001:xxx:xxx:100::2
+  netmask 64
+  dad-attempts 0
+  bridge_ports none
+  bridge_stp off
+  bridge_fd 0
+  post-up /sbin/ip -f inet6 neigh add proxy 2001:xxx:xxx:100::2 dev vmbr0
+  post-up /sbin/ip -f inet6 neigh add proxy 2001:xxx:xxx:100::3 dev enp1s0
+  post-up /sbin/ip -f inet6 route add       2001:xxx:xxx:100::3 dev vmbr0
+  post-up /sbin/ip -f inet6 neigh add proxy 2001:xxx:xxx:100::4 dev enp1s0
+  post-up /sbin/ip -f inet6 route add       2001:xxx:xxx:100::4 dev vmbr0
+  post-up /sbin/ip -f inet6 neigh add proxy 2001:xxx:xxx:100::5 dev enp1s0
+  post-up /sbin/ip -f inet6 route add       2001:xxx:xxx:100::5 dev vmbr0
+  post-up /sbin/ip -f inet6 neigh add proxy 2001:xxx:xxx:100::6 dev enp1s0
+  post-up /sbin/ip -f inet6 route add       2001:xxx:xxx:100::6 dev vmbr0
+  post-up /sbin/ip -f inet6 neigh add proxy 2001:xxx:xxx:100::7 dev enp1s0
+  post-up /sbin/ip -f inet6 route add       2001:xxx:xxx:100::7 dev vmbr0
+
+iface vmbr0 inet static
+  address 192.168.0.1
+  netmask 255.255.0.0
+</code></pre><ol start="7">
+<li>Set the <code>iptables</code> rules for the IPv4 NAT configuration.
+Install the package <code>iptables-persistent</code> to save and restore the iptables rules on reboot.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>apt install iptables-persistent
+</span></span></code></pre></div><p>In the file <code>/etc/iptables/rules.v4</code></p>
+<pre tabindex="0"><code>*nat
+:PREROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+# Do not masquerade to these reserved address blocks.
+-A POSTROUTING -s 192.168.0.0/16 -d 224.0.0.0/24 -j RETURN
+-A POSTROUTING -s 192.168.0.0/16 -d 255.255.255.255/32 -j RETURN
+# Masquerade all packets going from VMs to the LAN/Internet.
+-A POSTROUTING -s 192.168.0.0/16 ! -d 192.168.0.0/16 -p tcp -j MASQUERADE --to-ports 1024-65535
+-A POSTROUTING -s 192.168.0.0/16 ! -d 192.168.0.0/16 -p udp -j MASQUERADE --to-ports 1024-65535
+-A POSTROUTING -s 192.168.0.0/16 ! -d 192.168.0.0/16 -j MASQUERADE
+COMMIT
+
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+# Allow established traffic to the private subnet.
+-A FORWARD -d 192.168.0.0/16 -o vmbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+# Allow outbound traffic from the private subnet.
+-A FORWARD -s 192.168.0.0/16 -i vmbr0 -j ACCEPT
+# Allow traffic between virtual machines.
+-A FORWARD -i vmbr0 -o vmbr0 -j ACCEPT
+# Reject everything else.
+-A FORWARD -i vmbr0 -j REJECT --reject-with icmp-port-unreachable
+-A FORWARD -o vmbr0 -j REJECT --reject-with icmp-port-unreachable
+COMMIT
+</code></pre><p>In order to redirect ports from the host public IP to a VM private IP, add these rules:</p>
+<pre tabindex="0"><code>*nat
+# Redirect port 80,443 to 192.168.0.3
+-A PREROUTING -d &lt;public IP&gt;/32 -p tcp -m tcp --syn -m multiport --dports 80,443 -j DNAT --to-destination 192.168.0.3
+# Redirect port 8022 to 192.168.0.3:22
+-A PREROUTING -d &lt;public IP&gt;/32 -p tcp -m tcp --syn --dport 8022 -j DNAT --to-destination 192.168.0.3:22
+
+*filter
+# Allow packets that have been forwarded to particular ports on a VM
+-A FORWARD -d 192.168.0.3/32 -o vmbr0 -p tcp -m tcp --syn -m conntrack --ctstate NEW -m multiport --dports 80,443,8022 -j ACCEPT
+</code></pre><p>Apply the rules</p>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>iptables-restore &lt; /etc/iptables/rules.v4
+</span></span></code></pre></div><h2 id="libvirt-set-up">Libvirt set-up</h2>
+<ol>
+<li>Install <code>qemu</code> and <code>libvirt</code></li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>apt install --no-install-recommends qemu-system libvirt-clients libvirt-daemon-system virtinst qemu-utils
+</span></span></code></pre></div><ol start="2">
+<li>Disable libvirt default network</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>virsh net-destroy default
+</span></span><span style="display:flex;"><span>virsh net-autostart --disable default
+</span></span></code></pre></div><h2 id="virtual-machines-installation-and-management">Virtual machines installation and management</h2>
+<h3 id="virsh">Virsh</h3>
+<ul>
+<li>List the running VMs: <code>virsh list</code></li>
+<li>List all the VMs: <code>virsh list --all</code></li>
+<li>List the auto starting VMs: <code>virsh list --autostart</code></li>
+<li>Autostart a VM: <code>virsh autostart &lt;VM name&gt;</code></li>
+<li>Open the serial console of a VM: <code>virsh console &lt;VM name&gt;</code></li>
+<li>Edit the VM configuration: <code>virsh edit --domain &lt;VM name&gt;</code></li>
+</ul>
+<h3 id="debian">Debian</h3>
+<p>Let&rsquo;s create a first virtual machine running Debian</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IPv6</td>
+<td><code>2001:xxx:xxx:100::3/64</code></td>
+</tr>
+<tr>
+<td>IPv6 GW</td>
+<td><code>2001:xxx:xxx:100::2</code></td>
+</tr>
+<tr>
+<td>IPv4</td>
+<td><code>192.168.0.3/16</code></td>
+</tr>
+<tr>
+<td>IPv4 GW</td>
+<td><code>192.168.0.1</code></td>
+</tr>
+<tr>
+<td>DNS</td>
+<td><code>2001:xxx:xxx:100::2</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Simply use <code>virt-install</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>virt-install --virt-type kvm --name bookworm-amd64 --location https://deb.debian.org/debian/dists/bookworm/main/installer-amd64/ --os-variant debian11 --disk <span style="color:#268bd2">size</span><span style="color:#719e07">=</span><span style="color:#2aa198">10</span> --memory <span style="color:#2aa198">512</span> --graphics none --console pty,target_type<span style="color:#719e07">=</span>serial --extra-args <span style="color:#2aa198">&#34;console=ttyS0&#34;</span> --bridge vmbr0
+</span></span></code></pre></div><h3 id="openbsd">OpenBSD</h3>
+<p>Let&rsquo;s set-up a second virtual machine running OpenBSD</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IPv6</td>
+<td><code>2001:xxx:xxx:100::4/64</code></td>
+</tr>
+<tr>
+<td>IPv6 GW</td>
+<td><code>2001:xxx:xxx:100::2</code></td>
+</tr>
+<tr>
+<td>IPv4</td>
+<td><code>192.168.0.4/16</code></td>
+</tr>
+<tr>
+<td>IPv4 GW</td>
+<td><code>192.168.0.1</code></td>
+</tr>
+<tr>
+<td>DNS</td>
+<td><code>2001:xxx:xxx:100::2</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Create a qcow2 image file</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qemu-img create -f qcow2 /var/lib/libvirt/images/openbsd.qcow2 50G
+</span></span></code></pre></div><ul>
+<li>Boot the installer and proceed with a regular installation</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qemu-system-x86_64 --enable-kvm -m 2G -hda /var/lib/libvirt/images/openbsd.qcow2 -boot d -cdrom install74.iso
+</span></span></code></pre></div><ul>
+<li>Then, import it</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>virt-install --name<span style="color:#719e07">=</span>openbsd --virt-type<span style="color:#719e07">=</span>kvm --memory<span style="color:#719e07">=</span><span style="color:#2aa198">1024</span> --disk /var/lib/libvirt/images/openbsd.qcow2,bus<span style="color:#719e07">=</span>sata --import --vcpus<span style="color:#719e07">=</span><span style="color:#2aa198">2</span> --cpu host --os-variant<span style="color:#719e07">=</span>openbsd7.0 --network<span style="color:#719e07">=</span><span style="color:#268bd2">bridge</span><span style="color:#719e07">=</span>vmbr0,model<span style="color:#719e07">=</span>virtio --graphics<span style="color:#719e07">=</span>vnc
+</span></span></code></pre></div><ul>
+<li>Log in the system using the serial console and root account set-up during the installation</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>virsh console
+</span></span></code></pre></div><p>Configure the network interface <code>vio0</code>, the default gateway and the DNS server</p>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#b58900">echo</span> inet6 2001:xxx:xxx:100::4/64    &gt;  /etc/hostname.vio0
+</span></span><span style="display:flex;"><span><span style="color:#b58900">echo</span> inet 192.168.0.4/16             &gt;&gt; /etc/hostname.vio0
+</span></span><span style="display:flex;"><span><span style="color:#b58900">echo</span> 2001:xxx:xxx:100::2             &gt;  /etc/mygate
+</span></span><span style="display:flex;"><span><span style="color:#b58900">echo</span> 192.168.0.1                     &gt;&gt; /etc/mygate
+</span></span><span style="display:flex;"><span><span style="color:#b58900">echo</span> nameserver 2001:xxx:xxx:100::2  &gt;  /etc/resolv.conf
+</span></span><span style="display:flex;"><span><span style="color:#b58900">echo</span> lookup file <span style="color:#b58900">bind</span>                &gt;&gt; /etc/resolv.conf
+</span></span></code></pre></div><ul>
+<li>Load the network configuration</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sh /etc/netstart vio0
+</span></span></code></pre></div><ul>
+<li>Update the system, install convenient packages</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pkg_add -u
+</span></span><span style="display:flex;"><span>pkg_add vim
+</span></span><span style="display:flex;"><span>syspatch
+</span></span><span style="display:flex;"><span>sysupgrade
+</span></span></code></pre></div><h2 id="external-resources">External resources</h2>
+<p>This post is based on these sources:</p>
+<ul>
+<li><a href="https://lowendtalk.com/discussion/48591/configuring-ipv6-for-proxmox-kvm-on-dedibox-online-net">https://lowendtalk.com/discussion/48591/configuring-ipv6-for-proxmox-kvm-on-dedibox-online-net</a></li>
+<li><a href="https://jamielinux.com/docs/libvirt-networking-handbook/index.html">https://jamielinux.com/docs/libvirt-networking-handbook/index.html</a></li>
+</ul></div>
+
+		<p class="meta">Posted on <span class="postdate">11. March 2024</span></p>
+	</article>
+
+			</div>
+
+			<footer id="footer">
+				<p class="copyright">
+					
+						CC BY-SA 4.0
+					
+				</p>
+			</footer>
+		</div>
+
+		
+	</body>
+</html>

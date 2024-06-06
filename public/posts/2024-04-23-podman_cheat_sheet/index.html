@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		
+
+		<title>Podman cheat sheet</title>
+
+		
+		<link rel="stylesheet" href="https://hcartiaux.github.io/css/colors-dark.min.c55872c93a117ae390d387b98ba5b7afff286ffdcd1d53581682c96415ced087.css">
+
+		
+	</head>
+	<body>
+		<header id="header">
+			<h1><a href="https://hcartiaux.github.io/">My sysadmin notes</a></h1>
+			<p>Btw I use arch</p>
+		</header>
+
+		<div id="page">
+			<div id="sidebar">
+				<nav>
+	
+</nav>
+
+			</div>
+
+			<div id="content">
+				
+	<article class="post">
+		<h1><a href="https://hcartiaux.github.io/posts/2024-04-23-podman_cheat_sheet/">Podman cheat sheet</a> </h1>
+
+		<div class="post-content"><p>This is a cheat sheet of podman useful information and commands.</p>
+<p>Podman is feature equivalent with docker, with the advantage of not requiring root privileges and a daemon running as root.
+It can be used alongside with <code>buildah</code> to build container images, and <code>skopeo</code> to manage container images in a registry.</p>
+<h2 id="install-podman">Install podman</h2>
+<ul>
+<li>Install the package: <code>apt install podman</code></li>
+<li>Allow for unqualified search in the docker.io and quay.io repositories: <code>echo 'unqualified-search-registries=[&quot;docker.io&quot;, &quot;quay.io&quot;]' &gt; $HOME/.config/containers/registries.conf</code></li>
+<li>Enable the auto-update timer: <code>systemctl [--user] enable --now podman-auto-update.timer</code></li>
+</ul>
+<h2 id="image-management">Image management</h2>
+<ul>
+<li>List pulled images: <code>podman image ls</code></li>
+<li>Show the history of an image: <code>podman image history &lt;image name&gt;</code></li>
+<li>Retrieve or update an image: <code>podman image pull &lt;image name&gt;</code>
+Do not forget to restart the containers using this image to use the updated version.</li>
+<li>Retrieve a specific image version: <code>podman pull &lt;image name&gt;:&lt;version|latest&gt;</code></li>
+</ul>
+<h2 id="get-information-about-running-containers">Get information about running containers</h2>
+<ul>
+<li>List running containers: <code>podman ps</code></li>
+<li>List all containers: <code>podman ps -a</code></li>
+<li>Sort all containers by size: <code>podman ps --size --sort size</code></li>
+<li>Sort all containers by creation time: <code>podman ps --sort created</code></li>
+<li>List with a customized format: <code>podman ps --all --format &quot;{{.Names}} {{.Ports}} {{.Mounts}} {{.Status}}&quot;</code></li>
+<li>Live resource information by container: <code>podman stats</code></li>
+</ul>
+<h2 id="control-a-container">Control a container</h2>
+<ul>
+<li>Create a new container: <code>podman run -dt &lt;image name&gt;</code></li>
+<li>Create a new container and map a directory: <code>-v &lt;host directory&gt;:&lt;container mount point&gt;</code></li>
+<li>Create a new container and map a network port: <code>-p &lt;host port&gt;:&lt;container port&gt;</code></li>
+<li>Enable Auto-update: <code>--label io.containers.autoupdate=registry</code></li>
+<li>Checking for updates: <code>podman auto-update</code></li>
+<li>Copy a file to a container: <code>podman cp &lt;src&gt; &lt;dest&gt;</code></li>
+<li><code>podman [restart,start,stop,pause,unpause] &lt;CONTAINER ID&gt;</code></li>
+<li>Remove a container: <code>podman rm &lt;CONTAINER ID&gt;</code></li>
+</ul>
+<h2 id="configuration-generation">Configuration generation</h2>
+<h3 id="kube-definition-file">Kube definition file</h3>
+<ul>
+<li>Generate a kube file: <code>podman generate kube &lt;CONTAINER ID&gt; &gt; &lt;filename&gt;.yaml</code></li>
+<li>Import a kube file: <code>podman play kube &lt;filename&gt;.yaml</code></li>
+</ul>
+<h3 id="systemd-units-deprecated-since-podman-44">Systemd units (<em>deprecated since podman 4.4</em>)</h3>
+<ul>
+<li>
+<p>Pre-requisites: <code>systemctl --user enable podman-restart.service</code></p>
+</li>
+<li>
+<p>Generate a systemd service unit: <code>podman generate systemd --new &lt;CONTAINER ID&gt; &gt; ~/.config/systemd/user/&lt;CONTAINER NAME&gt;.service</code></p>
+</li>
+<li>
+<p>Reload systemd: <code>systemctl --user daemon-reload</code></p>
+</li>
+<li>
+<p>Enable the container to start at boot: <code>systemctl --user enable &lt;CONTAINER NAME&gt;.service</code></p>
+</li>
+</ul>
+<h3 id="quadlet">Quadlet</h3>
+<p>Configuration directories:</p>
+<ul>
+<li><code>/usr/share/containers/systemd/</code></li>
+<li><code>/etc/containers/systemd/</code></li>
+<li><code>~/.config/containers/systemd</code> (<em>rootless</em>)</li>
+</ul>
+<p>Create a container file, in example in <code>.config/containers/systemd/httpd.container</code>:</p>
+<pre tabindex="0"><code>[Unit]
+Description=HTTPD server
+After=local-fs.target
+
+[Container]
+Image=docker.io/library/httpd:latest
+#Exec=sleep 1000
+AutoUpdate=registry
+PublishPort=8080:80 # Port mapping
+Volume=%h/public:/var/www/ # %h is mapped to the user home dir
+Environment=ENV=prod # Environment variable
+
+[Install]
+# Start by default on boot
+WantedBy=multi-user.target default.target
+</code></pre><ul>
+<li>Reload and scan for local changes: <code>systemctl --user daemon-reload</code></li>
+<li>Show the generated service unit: <code>systemctl --user cat httpd</code></li>
+<li>Start the container: <code>systemctl --user start httpd</code></li>
+</ul>
+<h2 id="external-resources">External Resources</h2>
+<ul>
+<li><a href="https://linuxhandbook.com/podman-add-delete-containers/">https://linuxhandbook.com/podman-add-delete-containers/</a></li>
+<li><a href="https://www.redhat.com/sysadmin/create-containers-podman-quickly">https://www.redhat.com/sysadmin/create-containers-podman-quickly</a></li>
+<li><a href="https://www.redhat.com/sysadmin/container-information-podman">https://www.redhat.com/sysadmin/container-information-podman</a></li>
+<li><a href="https://www.redhat.com/sysadmin/update-container-images-podman">https://www.redhat.com/sysadmin/update-container-images-podman</a></li>
+<li><a href="https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods">https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods</a></li>
+<li><a href="https://www.redhat.com/sysadmin/podman-auto-updates-rollbacks">https://www.redhat.com/sysadmin/podman-auto-updates-rollbacks</a></li>
+<li><a href="https://linuxhandbook.com/autostart-podman-containers/">https://linuxhandbook.com/autostart-podman-containers/</a></li>
+<li><a href="https://mo8it.com/blog/quadlet/">https://mo8it.com/blog/quadlet/</a></li>
+<li><a href="https://linuxconfig.org/how-to-run-podman-containers-under-systemd-with-quadlet">https://linuxconfig.org/how-to-run-podman-containers-under-systemd-with-quadlet</a></li>
+</ul></div>
+
+		<p class="meta">Posted on <span class="postdate">20. April 2024</span></p>
+	</article>
+
+			</div>
+
+			<footer id="footer">
+				<p class="copyright">
+					
+						CC BY-SA 4.0
+					
+				</p>
+			</footer>
+		</div>
+
+		
+	</body>
+</html>

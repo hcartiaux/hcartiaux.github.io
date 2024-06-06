@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		
+
+		<title>Update LineageOS from 16.0 to 17.1 on the OnePlus 6T (fajita)</title>
+
+		
+		<link rel="stylesheet" href="https://hcartiaux.github.io/css/colors-dark.min.c55872c93a117ae390d387b98ba5b7afff286ffdcd1d53581682c96415ced087.css">
+
+		
+	</head>
+	<body>
+		<header id="header">
+			<h1><a href="https://hcartiaux.github.io/">My sysadmin notes</a></h1>
+			<p>Btw I use arch</p>
+		</header>
+
+		<div id="page">
+			<div id="sidebar">
+				<nav>
+	
+</nav>
+
+			</div>
+
+			<div id="content">
+				
+	<article class="post">
+		<h1><a href="https://hcartiaux.github.io/posts/2020-05-10-lineageos-update-oneplus-6t/">Update LineageOS from 16.0 to 17.1 on the OnePlus 6T (fajita)</a> </h1>
+
+		<div class="post-content"><p>Updating from 16.0 to 17.1 on A/B devices without data loss can be tricky, especially with the OnePlus 6T&hellip;</p>
+<p>Here are my upgrade notes.</p>
+<p>First, ADB and fastboot should be functional <a href="https://www.archlinux.org/packages/community/x86_64/android-tools/">android-tools</a>)</p>
+<p>An up-to-date Oxygen OS has to be sideloaded on both slots (a/b), this will bring updated firmwares and also, the compatibility with LineageOS 17.1.
+The easiest solution is to sideload the Oxygen OS zip on one slot, and then sideload <code>copy-partitions.zip</code> in order to copy Oxygen OS to the other slot.</p>
+<p>Then, we can sideload LineageOS 17.1 and Open Gapps (arm64), you can download the arm64 / nano package on <a href="https://opengapps.org/">opengapps.org</a></p>
+<p>You will need:</p>
+<ul>
+<li><a href="https://www.oneplus.com/fr/support/softwareupgrade/details?code=PM1574156215016">an up-to-date Oxygen OS build</a></li>
+<li><a href="https://download.lineageos.org/fajita">an up-to-date LineageOS build</a></li>
+<li><a href="https://androidfilehost.com/?fid=4349826312261712574">the file copy-partitions.zip</a></li>
+</ul>
+<p>Because of compatibility issues, we need to use <a href="https://forum.xda-developers.com/oneplus-6t/development/recovery-unofficial-twrp-touch-recovery-t3861482">unofficial recovery builds of twrp</a>:</p>
+<ul>
+<li><a href="https://sourceforge.net/projects/mauronofrio-twrp/files/Fajita/twrp-3.3.1-32-fajita-Pie-mauronofrio.img/download">TWRP 3.3.1-32 Pie Unofficial by mauronofrio</a></li>
+<li><a href="https://sourceforge.net/projects/mauronofrio-twrp/files/Fajita/twrp-3.3.1-32-fajita-Q-mauronofrio.img/download">TWRP 3.3.1-32 Q Unofficial by mauronofrio</a></li>
+</ul>
+<p>Downloads all these files, and start this procedure:</p>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>adb reboot bootloader
+</span></span><span style="display:flex;"><span>fastboot boot twrp-3.3.1-32-fajita-Pie-mauronofrio.img
+</span></span><span style="display:flex;"><span>adb shell twrp sideload
+</span></span><span style="display:flex;"><span>adb sideload OnePlus6TOxygen_34_OTA_044_all_2002220041_110bb9052a994b6f.zip
+</span></span><span style="display:flex;"><span>adb reboot bootloader
+</span></span><span style="display:flex;"><span>fastboot boot twrp-3.3.1-32-fajita-Q-mauronofrio.img
+</span></span><span style="display:flex;"><span>adb shell twrp sideload
+</span></span><span style="display:flex;"><span>adb sideload copy-partitions.zip
+</span></span><span style="display:flex;"><span>adb shell twrp sideload
+</span></span><span style="display:flex;"><span>adb sideload lineage-17.1-20200412-nightly-fajita-signed.zip
+</span></span><span style="display:flex;"><span>adb reboot bootloader
+</span></span><span style="display:flex;"><span>fastboot boot twrp-3.3.1-32-fajita-Q-mauronofrio.img
+</span></span><span style="display:flex;"><span>adb shell twrp sideload
+</span></span><span style="display:flex;"><span>adb sideload open_gapps-arm64-10.0-nano-20200412.zip
+</span></span><span style="display:flex;"><span>adb reboot
+</span></span></code></pre></div></div>
+
+		<p class="meta">Posted on <span class="postdate">10. May 2020</span></p>
+	</article>
+
+			</div>
+
+			<footer id="footer">
+				<p class="copyright">
+					
+						CC BY-SA 4.0
+					
+				</p>
+			</footer>
+		</div>
+
+		
+	</body>
+</html>

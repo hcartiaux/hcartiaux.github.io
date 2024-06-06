@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My sysadmin notes</title>
+    <link>https://hcartiaux.github.io/</link>
+    <description>Recent content on My sysadmin notes</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Wed, 01 May 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://hcartiaux.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Extend a partition on an OpenBSD system</title>
+      <link>https://hcartiaux.github.io/posts/2024-04-23-openbsd-extend-partition/</link>
+      <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/posts/2024-04-23-openbsd-extend-partition/</guid>
+      <description>&lt;p&gt;This post is a method to extend the last partition of the disk layout (usually) to use all the available disk space on an OpenBSD system.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Podman cheat sheet</title>
+      <link>https://hcartiaux.github.io/posts/2024-04-23-podman_cheat_sheet/</link>
+      <pubDate>Sat, 20 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/posts/2024-04-23-podman_cheat_sheet/</guid>
+      <description>&lt;p&gt;This is a cheat sheet of podman useful information and commands.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>DN42 Test bed, my own setup</title>
+      <link>https://hcartiaux.github.io/posts/2024-04-18-dn42-testbed/</link>
+      <pubDate>Thu, 18 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/posts/2024-04-18-dn42-testbed/</guid>
+      <description>&lt;p&gt;This is a description of my very own DN42 AS configuration.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Turing complete - self documentation</title>
+      <link>https://hcartiaux.github.io/posts/2024-04-17-turing-complete-documentation/</link>
+      <pubDate>Wed, 17 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/posts/2024-04-17-turing-complete-documentation/</guid>
+      <description>&lt;p&gt;This is my documentation for &lt;a href=&#34;https://turingcomplete.game/profile/38047&#34;&gt;my own game&lt;/a&gt; of &lt;a href=&#34;https://turingcomplete.game/&#34;&gt;Turing Complete&lt;/a&gt;.&#xA;Turing Complete purpose is to guide you through the implementation of a simple CPU, from the first logical gate to your assembly language definition.&lt;/p&gt;&#xA;&lt;p&gt;This page is mostly intended to myself as a reminder.&#xA;This is very far from the best design and solutions, but it&amp;rsquo;s the best I could do in a reasonable time :)&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Dedibox - set-up a virtualization server with Debian, KVM/libvirt and IPv6</title>
+      <link>https://hcartiaux.github.io/posts/2024-03-11-dedibox-debian-kvm-libvirt-ipv6/</link>
+      <pubDate>Mon, 11 Mar 2024 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/posts/2024-03-11-dedibox-debian-kvm-libvirt-ipv6/</guid>
+      <description>&lt;p&gt;The objective is to set-up a virtualization server on a &lt;a href=&#34;https://www.scaleway.com/en/dedibox/&#34;&gt;dedibox&lt;/a&gt; server with IPv6 support at NATed IPV4.&lt;/p&gt;&#xA;&lt;p&gt;I use this configuration as a cheap &amp;ldquo;home lab&amp;rdquo; virtualization server.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>BOINC - Berkeley Open Infrastructure for Network Computing</title>
+      <link>https://hcartiaux.github.io/posts/2024-03-10-boinc/</link>
+      <pubDate>Sun, 10 Mar 2024 13:00:00 +0200</pubDate>
+      <guid>https://hcartiaux.github.io/posts/2024-03-10-boinc/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Berkeley_Open_Infrastructure_for_Network_Computing&#34;&gt;Berkeley Open Infrastructure for Network Computing&lt;/a&gt; is an open-source middleware system for volunteer computing (a type of distributed computing).&lt;/p&gt;&#xA;&lt;p&gt;The client can be installed on any Debian system and used to join any BOINC project (&lt;a href=&#34;http://www.primegrid.com/&#34;&gt;PrimeGrid&lt;/a&gt;, &lt;a href=&#34;https://scienceunited.org/&#34;&gt;Science United&lt;/a&gt;, etc).&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Update LineageOS from 16.0 to 17.1 on the OnePlus 6T (fajita)</title>
+      <link>https://hcartiaux.github.io/posts/2020-05-10-lineageos-update-oneplus-6t/</link>
+      <pubDate>Sun, 10 May 2020 17:46:06 +0200</pubDate>
+      <guid>https://hcartiaux.github.io/posts/2020-05-10-lineageos-update-oneplus-6t/</guid>
+      <description>&lt;p&gt;Updating from 16.0 to 17.1 on A/B devices without data loss can be tricky, especially with the OnePlus 6T&amp;hellip;&lt;/p&gt;&#xA;&lt;p&gt;Here are my upgrade notes.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
