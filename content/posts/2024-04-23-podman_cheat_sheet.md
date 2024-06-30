@@ -55,7 +55,6 @@ It can be used alongside with `buildah` to build container images, and `skopeo` 
 ### Systemd units (*deprecated since podman 4.4*)
 
 * Pre-requisites: `systemctl --user enable podman-restart.service`
-
 * Generate a systemd service unit: `podman generate systemd --new <CONTAINER ID> > ~/.config/systemd/user/<CONTAINER NAME>.service`
 * Reload systemd: `systemctl --user daemon-reload`
 * Enable the container to start at boot: `systemctl --user enable <CONTAINER NAME>.service`
