@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gaming on My sysadmin notes</title>
+    <link>https://hcartiaux.github.io/tags/gaming/</link>
+    <description>Recent content in Gaming on My sysadmin notes</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Wed, 17 Apr 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://hcartiaux.github.io/tags/gaming/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Turing complete - self documentation</title>
+      <link>https://hcartiaux.github.io/posts/2024-04-17-turing-complete-documentation/</link>
+      <pubDate>Wed, 17 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/posts/2024-04-17-turing-complete-documentation/</guid>
+      <description>&lt;p&gt;This is my documentation for &lt;a href=&#34;https://turingcomplete.game/profile/38047&#34;&gt;my own game&lt;/a&gt; of &lt;a href=&#34;https://turingcomplete.game/&#34;&gt;Turing Complete&lt;/a&gt;.&#xA;Turing Complete purpose is to guide you through the implementation of a simple CPU, from the first logical gate to your assembly language definition.&lt;/p&gt;&#xA;&lt;p&gt;This page is mostly intended to myself as a reminder.&#xA;This is very far from the best design and solutions, but it&amp;rsquo;s the best I could do in a reasonable time :)&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -7,6 +7,56 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Wed, 01 May 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://hcartiaux.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Openbsd</title>
+      <link>https://hcartiaux.github.io/tags/openbsd/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/tags/openbsd/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Sysadmin</title>
+      <link>https://hcartiaux.github.io/tags/sysadmin/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/tags/sysadmin/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Containers</title>
+      <link>https://hcartiaux.github.io/tags/containers/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/tags/containers/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Linux</title>
+      <link>https://hcartiaux.github.io/tags/linux/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/tags/linux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Gaming</title>
+      <link>https://hcartiaux.github.io/tags/gaming/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/tags/gaming/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Network</title>
+      <link>https://hcartiaux.github.io/tags/network/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/tags/network/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Android</title>
+      <link>https://hcartiaux.github.io/tags/android/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/tags/android/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

@@ -1,37 +1,92 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width">
-		
+<html><head lang="en">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Update LineageOS from 16.0 to 17.1 on the OnePlus 6T (fajita) - My sysadmin notes</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Updating from 16.0 to 17.1 on A/B devices without data loss can be tricky, especially with the OnePlus 6T&hellip;
+Here are my upgrade notes." />
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content="https://hcartiaux.github.io/posts/2020-05-10-lineageos-update-oneplus-6t/">
+  <meta property="og:site_name" content="My sysadmin notes">
+  <meta property="og:title" content="Update LineageOS from 16.0 to 17.1 on the OnePlus 6T (fajita)">
+  <meta property="og:description" content="Updating from 16.0 to 17.1 on A/B devices without data loss can be tricky, especially with the OnePlus 6T…
+Here are my upgrade notes.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2020-05-10T17:46:06+02:00">
+    <meta property="article:modified_time" content="2020-05-10T17:46:06+02:00">
+    <meta property="article:tag" content="Android">
 
-		<title>Update LineageOS from 16.0 to 17.1 on the OnePlus 6T (fajita)</title>
-
-		
-		<link rel="stylesheet" href="https://hcartiaux.github.io/css/colors-dark.min.c55872c93a117ae390d387b98ba5b7afff286ffdcd1d53581682c96415ced087.css">
-
-		
-	</head>
-	<body>
-		<header id="header">
-			<h1><a href="https://hcartiaux.github.io/">My sysadmin notes</a></h1>
-			<p>Btw I use arch</p>
-		</header>
-
-		<div id="page">
-			<div id="sidebar">
-				<nav>
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Update LineageOS from 16.0 to 17.1 on the OnePlus 6T (fajita)">
+  <meta name="twitter:description" content="Updating from 16.0 to 17.1 on A/B devices without data loss can be tricky, especially with the OnePlus 6T…
+Here are my upgrade notes.">
+<script src="https://hcartiaux.github.io/js/feather.min.js"></script>
 	
-</nav>
+	
+        <link href="https://hcartiaux.github.io/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css" rel="stylesheet">
+	
 
-			</div>
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://hcartiaux.github.io/css/main.6088c83166692b4a79abc75becec2939f1634cca87b98ebc21911ad3e6892fb3.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://hcartiaux.github.io/css/dark.79f0c18dec9d57aff71529bed6b0a1f8289b4d7ab5f4977b7812cb344d58528d.css"  />
+	
 
-			<div id="content">
-				
-	<article class="post">
-		<h1><a href="https://hcartiaux.github.io/posts/2020-05-10-lineageos-update-oneplus-6t/">Update LineageOS from 16.0 to 17.1 on the OnePlus 6T (fajita)</a> </h1>
+	
+	
 
-		<div class="post-content"><p>Updating from 16.0 to 17.1 on A/B devices without data loss can be tricky, especially with the OnePlus 6T&hellip;</p>
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://hcartiaux.github.io/">My sysadmin notes</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">All posts</a>
+		
+		<a href="/tags">Tags</a>
+		
+		| <span id="dark-mode-toggle" onclick="toggleTheme()"></span>
+		<script src="https://hcartiaux.github.io/js/themetoggle.js"></script>
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">Update LineageOS from 16.0 to 17.1 on the OnePlus 6T (fajita)</h1>
+			<div class="meta">Posted on May 10, 2020</div>
+		</div>
+		
+
+		
+
+		<section class="body">
+			<p>Updating from 16.0 to 17.1 on A/B devices without data loss can be tricky, especially with the OnePlus 6T&hellip;</p>
 <p>Here are my upgrade notes.</p>
 <p>First, ADB and fastboot should be functional <a href="https://www.archlinux.org/packages/community/x86_64/android-tools/">android-tools</a>)</p>
 <p>An up-to-date Oxygen OS has to be sideloaded on both slots (a/b), this will bring updated firmwares and also, the compatibility with LineageOS 17.1.
@@ -64,22 +119,32 @@ The easiest solution is to sideload the Oxygen OS zip on one slot, and then side
 </span></span><span style="display:flex;"><span>adb shell twrp sideload
 </span></span><span style="display:flex;"><span>adb sideload open_gapps-arm64-10.0-nano-20200412.zip
 </span></span><span style="display:flex;"><span>adb reboot
-</span></span></code></pre></div></div>
+</span></span></code></pre></div>
+		</section>
 
-		<p class="meta">Posted on <span class="postdate">10. May 2020</span></p>
-	</article>
-
-			</div>
-
-			<footer id="footer">
-				<p class="copyright">
-					
-						CC BY-SA 4.0
-					
-				</p>
-			</footer>
+		<div class="post-tags">
+			
+			
+			
 		</div>
+		</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/hcartiaux" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://www.linkedin.com/in/hyacinthecartiaux/" rel="me" title="Linkedin"><i data-feather="linkedin"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  CC BY-SA 4.0 |  <a
+      href="https://github.com/hcartiaux/hugo-theme-archie-solarized">Archie Solarized Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
-		
-	</body>
+
+  
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
 </html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Network on My sysadmin notes</title>
+    <link>https://hcartiaux.github.io/tags/network/</link>
+    <description>Recent content in Network on My sysadmin notes</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Mon, 11 Mar 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://hcartiaux.github.io/tags/network/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dedibox - set-up a virtualization server with Debian, KVM/libvirt and IPv6</title>
+      <link>https://hcartiaux.github.io/posts/2024-03-11-dedibox-debian-kvm-libvirt-ipv6/</link>
+      <pubDate>Mon, 11 Mar 2024 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/posts/2024-03-11-dedibox-debian-kvm-libvirt-ipv6/</guid>
+      <description>&lt;p&gt;The objective is to set-up a virtualization server on a &lt;a href=&#34;https://www.scaleway.com/en/dedibox/&#34;&gt;dedibox&lt;/a&gt; server with IPv6 support at NATed IPV4.&lt;/p&gt;&#xA;&lt;p&gt;I use this configuration as a cheap &amp;ldquo;home lab&amp;rdquo; virtualization server.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

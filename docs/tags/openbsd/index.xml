@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Openbsd on My sysadmin notes</title>
+    <link>https://hcartiaux.github.io/tags/openbsd/</link>
+    <description>Recent content in Openbsd on My sysadmin notes</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Wed, 01 May 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://hcartiaux.github.io/tags/openbsd/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Extend a partition on an OpenBSD system</title>
+      <link>https://hcartiaux.github.io/posts/2024-04-23-openbsd-extend-partition/</link>
+      <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
+      <guid>https://hcartiaux.github.io/posts/2024-04-23-openbsd-extend-partition/</guid>
+      <description>&lt;p&gt;This post is a method to extend the last partition of the disk layout (usually) to use all the available disk space on an OpenBSD system.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

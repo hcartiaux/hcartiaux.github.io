@@ -1,37 +1,107 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width">
-		
+<html><head lang="en">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Podman cheat sheet - My sysadmin notes</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="This is a cheat sheet of podman useful information and commands." />
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content="https://hcartiaux.github.io/posts/2024-04-23-podman_cheat_sheet/">
+  <meta property="og:site_name" content="My sysadmin notes">
+  <meta property="og:title" content="Podman cheat sheet">
+  <meta property="og:description" content="This is a cheat sheet of podman useful information and commands.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-04-20T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-04-20T00:00:00+00:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="Sysadmin">
+    <meta property="article:tag" content="Containers">
 
-		<title>Podman cheat sheet</title>
-
-		
-		<link rel="stylesheet" href="https://hcartiaux.github.io/css/colors-dark.min.c55872c93a117ae390d387b98ba5b7afff286ffdcd1d53581682c96415ced087.css">
-
-		
-	</head>
-	<body>
-		<header id="header">
-			<h1><a href="https://hcartiaux.github.io/">My sysadmin notes</a></h1>
-			<p>Btw I use arch</p>
-		</header>
-
-		<div id="page">
-			<div id="sidebar">
-				<nav>
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Podman cheat sheet">
+  <meta name="twitter:description" content="This is a cheat sheet of podman useful information and commands.">
+<script src="https://hcartiaux.github.io/js/feather.min.js"></script>
 	
+	
+        <link href="https://hcartiaux.github.io/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://hcartiaux.github.io/css/main.6088c83166692b4a79abc75becec2939f1634cca87b98ebc21911ad3e6892fb3.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://hcartiaux.github.io/css/dark.79f0c18dec9d57aff71529bed6b0a1f8289b4d7ab5f4977b7812cb344d58528d.css"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://hcartiaux.github.io/">My sysadmin notes</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">All posts</a>
+		
+		<a href="/tags">Tags</a>
+		
+		| <span id="dark-mode-toggle" onclick="toggleTheme()"></span>
+		<script src="https://hcartiaux.github.io/js/themetoggle.js"></script>
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">Podman cheat sheet</h1>
+			<div class="meta">Posted on Apr 20, 2024</div>
+		</div>
+		
+
+		
+		<nav id="TableOfContents">
+  <ul>
+    <li><a href="#install-podman">Install podman</a></li>
+    <li><a href="#image-management">Image management</a></li>
+    <li><a href="#get-information-about-running-containers">Get information about running containers</a></li>
+    <li><a href="#control-a-container">Control a container</a></li>
+    <li><a href="#configuration-generation">Configuration generation</a>
+      <ul>
+        <li><a href="#kube-definition-file">Kube definition file</a></li>
+        <li><a href="#systemd-units-deprecated-since-podman-44">Systemd units (<em>deprecated since podman 4.4</em>)</a></li>
+        <li><a href="#quadlet">Quadlet</a></li>
+      </ul>
+    </li>
+    <li><a href="#external-resources">External Resources</a></li>
+  </ul>
 </nav>
 
-			</div>
-
-			<div id="content">
-				
-	<article class="post">
-		<h1><a href="https://hcartiaux.github.io/posts/2024-04-23-podman_cheat_sheet/">Podman cheat sheet</a> </h1>
-
-		<div class="post-content"><p>This is a cheat sheet of podman useful information and commands.</p>
+		<section class="body">
+			<p>This is a cheat sheet of podman useful information and commands.</p>
 <p>Podman is feature equivalent with docker, with the advantage of not requiring root privileges and a daemon running as root.
 It can be used alongside with <code>buildah</code> to build container images, and <code>skopeo</code> to manage container images in a registry.</p>
 <h2 id="install-podman">Install podman</h2>
@@ -76,18 +146,10 @@ Do not forget to restart the containers using this image to use the updated vers
 </ul>
 <h3 id="systemd-units-deprecated-since-podman-44">Systemd units (<em>deprecated since podman 4.4</em>)</h3>
 <ul>
-<li>
-<p>Pre-requisites: <code>systemctl --user enable podman-restart.service</code></p>
-</li>
-<li>
-<p>Generate a systemd service unit: <code>podman generate systemd --new &lt;CONTAINER ID&gt; &gt; ~/.config/systemd/user/&lt;CONTAINER NAME&gt;.service</code></p>
-</li>
-<li>
-<p>Reload systemd: <code>systemctl --user daemon-reload</code></p>
-</li>
-<li>
-<p>Enable the container to start at boot: <code>systemctl --user enable &lt;CONTAINER NAME&gt;.service</code></p>
-</li>
+<li>Pre-requisites: <code>systemctl --user enable podman-restart.service</code></li>
+<li>Generate a systemd service unit: <code>podman generate systemd --new &lt;CONTAINER ID&gt; &gt; ~/.config/systemd/user/&lt;CONTAINER NAME&gt;.service</code></li>
+<li>Reload systemd: <code>systemctl --user daemon-reload</code></li>
+<li>Enable the container to start at boot: <code>systemctl --user enable &lt;CONTAINER NAME&gt;.service</code></li>
 </ul>
 <h3 id="quadlet">Quadlet</h3>
 <p>Configuration directories:</p>
@@ -97,22 +159,22 @@ Do not forget to restart the containers using this image to use the updated vers
 <li><code>~/.config/containers/systemd</code> (<em>rootless</em>)</li>
 </ul>
 <p>Create a container file, in example in <code>.config/containers/systemd/httpd.container</code>:</p>
-<pre tabindex="0"><code>[Unit]
-Description=HTTPD server
-After=local-fs.target
-
-[Container]
-Image=docker.io/library/httpd:latest
-#Exec=sleep 1000
-AutoUpdate=registry
-PublishPort=8080:80 # Port mapping
-Volume=%h/public:/var/www/ # %h is mapped to the user home dir
-Environment=ENV=prod # Environment variable
-
-[Install]
-# Start by default on boot
-WantedBy=multi-user.target default.target
-</code></pre><ul>
+<div class="highlight"><pre tabindex="0" style="color:#93a1a1;background-color:#002b36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>[Unit]
+</span></span><span style="display:flex;"><span>Description<span style="color:#719e07">=</span>HTTPD server
+</span></span><span style="display:flex;"><span>After<span style="color:#719e07">=</span>local<span style="color:#719e07">-</span>fs<span style="color:#719e07">.</span>target
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[<span style="color:#cb4b16">Container</span>]
+</span></span><span style="display:flex;"><span><span style="color:#cb4b16">Image</span><span style="color:#719e07">=</span>docker<span style="color:#719e07">.</span>io<span style="color:#719e07">/</span>library<span style="color:#719e07">/</span>httpd:latest
+</span></span><span style="display:flex;"><span><span style="color:#586e75">#Exec=sleep 1000</span>
+</span></span><span style="display:flex;"><span>AutoUpdate<span style="color:#719e07">=</span>registry
+</span></span><span style="display:flex;"><span>PublishPort<span style="color:#719e07">=</span><span style="color:#2aa198">8080</span>:<span style="color:#2aa198">80</span> <span style="color:#586e75"># Port mapping</span>
+</span></span><span style="display:flex;"><span>Volume<span style="color:#719e07">=%</span>h<span style="color:#719e07">/</span>public:<span style="color:#719e07">/</span><span style="color:#719e07">var</span><span style="color:#719e07">/</span>www<span style="color:#719e07">/</span> <span style="color:#586e75"># %h is mapped to the user home dir</span>
+</span></span><span style="display:flex;"><span><span style="color:#cb4b16">Environment</span><span style="color:#719e07">=</span>ENV<span style="color:#719e07">=</span>prod <span style="color:#586e75"># Environment variable</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[Install]
+</span></span><span style="display:flex;"><span><span style="color:#586e75"># Start by default on boot</span>
+</span></span><span style="display:flex;"><span>WantedBy<span style="color:#719e07">=</span>multi<span style="color:#719e07">-</span>user<span style="color:#719e07">.</span>target default<span style="color:#719e07">.</span>target
+</span></span></code></pre></div><ul>
 <li>Reload and scan for local changes: <code>systemctl --user daemon-reload</code></li>
 <li>Show the generated service unit: <code>systemctl --user cat httpd</code></li>
 <li>Start the container: <code>systemctl --user start httpd</code></li>
@@ -128,22 +190,44 @@ WantedBy=multi-user.target default.target
 <li><a href="https://linuxhandbook.com/autostart-podman-containers/">https://linuxhandbook.com/autostart-podman-containers/</a></li>
 <li><a href="https://mo8it.com/blog/quadlet/">https://mo8it.com/blog/quadlet/</a></li>
 <li><a href="https://linuxconfig.org/how-to-run-podman-containers-under-systemd-with-quadlet">https://linuxconfig.org/how-to-run-podman-containers-under-systemd-with-quadlet</a></li>
-</ul></div>
+</ul>
+		</section>
 
-		<p class="meta">Posted on <span class="postdate">20. April 2024</span></p>
-	</article>
-
-			</div>
-
-			<footer id="footer">
-				<p class="copyright">
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
 					
-						CC BY-SA 4.0
+					<li><a href="/tags/linux">linux</a></li>
 					
-				</p>
-			</footer>
+					<li><a href="/tags/sysadmin">sysadmin</a></li>
+					
+					<li><a href="/tags/containers">containers</a></li>
+					
+				</ul>
+			</nav>
+			
+			
 		</div>
+		</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/hcartiaux" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://www.linkedin.com/in/hyacinthecartiaux/" rel="me" title="Linkedin"><i data-feather="linkedin"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  CC BY-SA 4.0 |  <a
+      href="https://github.com/hcartiaux/hugo-theme-archie-solarized">Archie Solarized Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
-		
-	</body>
+
+  
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
 </html>
