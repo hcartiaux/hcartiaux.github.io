@@ -1,20 +1,48 @@
 baseURL = "https://hcartiaux.github.io/"
 languageCode = "en-us"
 title = "My sysadmin notes"
-theme = "solar-theme-hugo"
+theme = "archie-solarized"
 paginate = 5
-pygmentsStyle = "solarized-dark" # solarized-light, -dark or -dark256
 copyright = "CC BY-SA 4.0"
+pygmentsStyle = "solarized-dark"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
 publishDir = "docs"
 
 [params]
-  scheme = "dark"
-  description = "Btw I use arch"
+  mode="toggle" # color-mode → light,dark,toggle or auto
+  useCDN=false # don't use CDNs for fonts and icons, instead serve them locally.
+  subtitle = "Btw I use arch"
+  mathjax = false # enable MathJax support
+  katex = true # enable KaTeX support
 
-#[menu]
-#  [[menu.main]]
-#    name = "Home"
-#    url = "/index.html"
-#  [[menu.myself]]
-#    name = "My github"
-#    url = "https://github.com/hcartiaux/"
+[[params.social]]
+name = "GitHub"
+icon = "github"
+url = "https://github.com/hcartiaux"
+
+[[params.social]]
+name = "Linkedin"
+icon = "linkedin"
+url = "https://www.linkedin.com/in/hyacinthecartiaux/"
+
+[[menu.main]]
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "All posts"
+url = "/posts"
+weight = 2
+
+# [[menu.main]]
+# name = "About"
+# url = "/about"
+# weight = 3
+
+[[menu.main]]
+name = "Tags"
+url = "/tags"
+weight = 4
+
