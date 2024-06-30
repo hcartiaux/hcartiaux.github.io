@@ -2,6 +2,7 @@
 title: "Extend a partition on an OpenBSD system"
 date: 2024-05-01
 draft: false
+tags: [openbsd, sysadmin]
 ---
 
 This post is a method to extend the last partition of the disk layout (usually) to use all the available disk space on an OpenBSD system.

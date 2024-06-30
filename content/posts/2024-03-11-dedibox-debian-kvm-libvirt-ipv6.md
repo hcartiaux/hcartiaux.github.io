@@ -1,6 +1,8 @@
 ---
 title: "Dedibox - set-up a virtualization server with Debian, KVM/libvirt and IPv6"
 date: 2024-03-11
+tags: [linux, sysadmin, network]
+toc: true
 ---
 
 The objective is to set-up a virtualization server on a [dedibox](https://www.scaleway.com/en/dedibox/) server with IPv6 support at NATed IPV4.
@@ -32,7 +34,7 @@ Online allocates a /48 to each customer, we will split it and create a /56 in th
 |-------------|-----------|----------------------------------|--------------------------|
 | Host        | `enp1s0`  | `2001:xxx:xxx:100::1/64`         | AUTO (RA)                |
 | Host        | `vmbr0`   | `2001:xxx:xxx:100::2/64`         | N/A                      |
-| VM1 <ID=1>  | `enp1s0`  | `2001:xxx:xxx:100::[2+\<ID>]/64` | `2001:xxx:xxx:100::2/64` |
+| VM1 <ID=1>  | `enp1s0`  | `2001:xxx:xxx:100::[2+<ID>]/64`  | `2001:xxx:xxx:100::2/64` |
 
 
 #### IPv4
@@ -41,7 +43,7 @@ Online allocates a /48 to each customer, we will split it and create a /56 in th
 |-------------|-----------|-----------------------|---------------|
 | Host        | enp1s0    | DHCP                  | DHCP          |
 | Host        | vmbr0     | `192.168.0.1/16`      | N/A           |
-| VM1 <ID=1>  | enp1s0    | `192.168.0.[2+\<ID>]` | `192.168.0.1` |
+| VM1 <ID=1>  | enp1s0    | `192.168.0.[2+<ID>]`  | `192.168.0.1` |
 
 
 ### System configuration
@@ -227,9 +229,8 @@ virsh net-autostart --disable default
 
 Let's create a first virtual machine running Debian
 
-|          |                         |
-|----------|-------------------------|
 | IPv6     | `2001:xxx:xxx:100::3/64`|
+|----------|-------------------------|
 | IPv6 GW  | `2001:xxx:xxx:100::2`   |
 | IPv4     | `192.168.0.3/16`        |
 | IPv4 GW  | `192.168.0.1`           |
@@ -245,9 +246,8 @@ virt-install --virt-type kvm --name bookworm-amd64 --location https://deb.debian
 
 Let's set-up a second virtual machine running OpenBSD
 
-|          |                          |
-|----------|--------------------------|
 | IPv6     | `2001:xxx:xxx:100::4/64` |
+|----------|--------------------------|
 | IPv6 GW  | `2001:xxx:xxx:100::2`    |
 | IPv4     | `192.168.0.4/16`         |
 | IPv4 GW  | `192.168.0.1`            |

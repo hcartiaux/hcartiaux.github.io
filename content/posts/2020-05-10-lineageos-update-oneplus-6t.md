@@ -2,12 +2,14 @@
 title: "Update LineageOS from 16.0 to 17.1 on the OnePlus 6T (fajita)"
 date: 2020-05-10T17:46:06+02:00
 draft: false
+tags: android
 ---
 
 Updating from 16.0 to 17.1 on A/B devices without data loss can be tricky, especially with the OnePlus 6T...
 
 Here are my upgrade notes.
-<!--more-->                                                                                                                                                                                                                                                                                                                 
+<!--more-->
+
 First, ADB and fastboot should be functional [android-tools](https://www.archlinux.org/packages/community/x86_64/android-tools/))
 
 An up-to-date Oxygen OS has to be sideloaded on both slots (a/b), this will bring updated firmwares and also, the compatibility with LineageOS 17.1.

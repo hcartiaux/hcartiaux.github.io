@@ -2,6 +2,8 @@
 title: "Podman cheat sheet"
 date: 2024-04-20
 draft: false
+toc: true
+tags: [linux, sysadmin, containers]
 ---
 
 This is a cheat sheet of podman useful information and commands.
