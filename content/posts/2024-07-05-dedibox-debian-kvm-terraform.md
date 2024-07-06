@@ -223,7 +223,7 @@ The project provides:
 * a [CI/CD pipeline](https://github.com/hcartiaux/openbsd-cloud-image/actions/) to generate new system images, test them briefly and release them
 * the [qcow2 images](https://github.com/hcartiaux/openbsd-cloud-image/releases/latest), which I use directly in my Terraform configuration.
 
-In my configuration, I can spawn an OpenBSD instance using this configuration:
+In my terraform set-up, I can spawn an OpenBSD instance using this configuration:
 
 ```hcl
 vms_list = {
