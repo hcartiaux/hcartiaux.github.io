@@ -146,7 +146,7 @@ I will only explain in detail my `terraform.tfvars`, since it's the only file th
 1. This is the libvirt server configuration
 
 ```hcl
-server_uri = "qemu+ssh://hcartiaux@srv.nbsdn.fr.eu.org:443/system"
+server_uri = "qemu+ssh://sysadmin@srv.nbsdn.fr.eu.org:443/system"
 pool_name  = "terraform"
 pool_path  = "/var/lib/libvirt/terraform"
 ```
@@ -249,7 +249,7 @@ vms_list = {
     users = {
       "sysadmin" = {
         shell               = "/usr/local/bin/bash"
-        doas                = "permit nopass hcartiaux as root"
+        doas                = "permit nopass sysadmin as root"
         hashed_passwd       = "!"
         lock_passwd         = true
         ssh_authorized_keys = ["ssh-ed25519 ......................"]
