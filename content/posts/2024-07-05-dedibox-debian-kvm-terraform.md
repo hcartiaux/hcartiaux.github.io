@@ -1,6 +1,6 @@
 ---
 title: "Bootstrapping VMs on a virtualization server with Debian, KVM/libvirt using Terraform and cloud-init (Part 2/2)"
-date: 2024-05-07
+date: 2024-07-05
 tags: [linux, sysadmin, network, terraform, homelab]
 toc: true
 ---
