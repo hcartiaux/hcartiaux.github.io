@@ -44,7 +44,7 @@ I will briefly explain [this example](https://github.com/dmacvicar/terraform-pro
 
 1. Specify the terraform provider source
 
-```
+```hcl
 terraform {
  required_version = ">= 0.13"
   required_providers {
@@ -58,7 +58,7 @@ terraform {
 
 2. Configure the libvirt provider, specify the URI of your libvirt daemon, it can be local like in this example or accessed remotely via SSH (`qemu+ssh://<ssh host>/system`)
 
-```
+```hcl
 provider "libvirt" {
   uri = "qemu:///system"
 }
@@ -66,7 +66,7 @@ provider "libvirt" {
 
 3. Specify the source of the system image, and the system disk size, using resources of type `libvirt_volume`
 
-```
+```hcl
 resource "libvirt_volume" "os_image_ubuntu" {
   name   = "os_image_ubuntu"
   pool   = "default"
@@ -84,7 +84,7 @@ resource "libvirt_volume" "disk_ubuntu_resized" {
 4. Specify your cloud-init configuration in a resource of type `libvirt_cloudinit_disk`.
 The provided configuration will be transformed into an iso file and attached to the virtual machine on boot.
 
-```
+```hcl
 # Use CloudInit to add our ssh-key to the instance
 resource "libvirt_cloudinit_disk" "cloudinit_ubuntu_resized" {
   name = "cloudinit_ubuntu_resized.iso"
@@ -107,7 +107,7 @@ EOF
 
 5. Define a virtual machine (called "domain" in libvirt)
 
-```
+```hcl
 resource "libvirt_domain" "domain_ubuntu_resized" {
   name = "doman_ubuntu_resized"
   memory = "512"
@@ -145,7 +145,7 @@ I will only explain in detail my `terraform.tfvars`, since it's the only file th
 
 1. This is the libvirt server configuration
 
-```
+```hcl
 server_uri = "qemu+ssh://hcartiaux@srv.nbsdn.fr.eu.org:443/system"
 pool_name  = "terraform"
 pool_path  = "/var/lib/libvirt/terraform"
@@ -153,7 +153,7 @@ pool_path  = "/var/lib/libvirt/terraform"
 
 2. Since all VMs share the same network, I define the gateways and nameservers in common
 
-```
+```hcl
 network_defaults = {
   gateway4    = "192.168.0.1"
   gateway6    = "2001:bc8:3feb:100::2"
@@ -163,7 +163,7 @@ network_defaults = {
 
 3. I specify default user settings for all VMs. The root account is locked for all VMs. `users_default` is a [map](https://spacelift.io/blog/terraform-map-variable) of user objects, so it could be used to define several users.
 
-```
+```hcl
 users_defaults = {
   "root" = {
     hashed_passwd = "!"
@@ -174,7 +174,7 @@ users_defaults = {
 
 4. I define the map `vms_list`, which is actually the list of VMs.
 
-```
+```hcl
 vms_list = {
 [...]
   "tf-debian" = {
@@ -225,7 +225,7 @@ The project provides:
 
 In my configuration, I can spawn an OpenBSD instance using this configuration:
 
-```
+```hcl
 vms_list = {
 [...]
   "tf-openbsd" = {
