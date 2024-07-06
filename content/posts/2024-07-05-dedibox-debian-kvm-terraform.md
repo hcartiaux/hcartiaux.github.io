@@ -262,5 +262,5 @@ vms_list = {
 
 ## That's all folks
 
-This is how I set-up my "homelab" experiments on a cheap dedicated server. 
+This is how I set-up my "homelab" experiments on a cheap dedicated server, or should I say my "remotelab".
 Once my VMs are booted and reachable, I customize them using [my ansible configuration](https://github.com/hcartiaux/ansible).
