@@ -1,7 +1,7 @@
 ---
-title: "Dedibox - set-up a virtualization server with Debian, KVM/libvirt and IPv6"
+title: "Set-up a virtualization server with Debian, KVM/libvirt and IPv6 on a Dedibox (Part 1/2)"
 date: 2024-03-11
-tags: [linux, sysadmin, network]
+tags: [linux, sysadmin, network, homelab]
 toc: true
 ---
 
@@ -213,6 +213,20 @@ apt install --no-install-recommends qemu-system libvirt-clients libvirt-daemon-s
 virsh net-destroy default
 virsh net-autostart --disable default
 ```
+
+## Ansible
+
+I've implemented the configuration described below in [an ansible role](https://github.com/hcartiaux/ansible/tree/main/roles/dedibox_kvm_host).
+
+The only configuration needed in the inventory is the DHCP DUID, the IPv6 block and the public IPv4 address.
+
+```
+dedibox_kvm_host_dhcp_duid: xx:xx:xx:xx:xx:xx:xx:xx:xx:xx
+dedibox_kvm_host_ipv6_block: 2001:bc8:3feb:100
+dedibox_kvm_host_phys_iface_ipv4_address: 51.15.171.197
+```
+
+In my own configuration, I've encrypted the DUID using ansible-vault.
 
 ## Virtual machines installation and management
 
