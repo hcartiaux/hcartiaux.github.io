@@ -216,7 +216,7 @@ virsh net-autostart --disable default
 
 ## Ansible
 
-I've implemented the configuration described below in [an ansible role](https://github.com/hcartiaux/ansible/tree/main/roles/dedibox_kvm_host).
+I've implemented the configuration described above in [an ansible role](https://github.com/hcartiaux/ansible/tree/main/roles/dedibox_kvm_host).
 
 The only configuration needed in the inventory is the DHCP DUID, the IPv6 block and the public IPv4 address.
 
