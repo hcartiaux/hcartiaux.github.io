@@ -7,10 +7,9 @@ tags: [gaming]
 This is my documentation for [my own game](https://turingcomplete.game/profile/38047) of [Turing Complete](https://turingcomplete.game/).
 Turing Complete purpose is to guide you through the implementation of a simple CPU, from the first logical gate to your assembly language definition.
 
-This page is mostly intended to myself as a reminder.
-This is very far from the best design and solutions, but it's the best I could do in a reasonable time :)
-
 <!--more-->
+
+{{< callout emoji="⚠️" text="This page is mainly for myself as a reminder. This is very far from the best design and solutions, but it's the best I could do in a reasonable time :)" >}}
 
 ## Schematic
 
