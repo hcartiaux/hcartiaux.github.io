@@ -32,13 +32,13 @@ url = "/"
 weight = 1
 
 [[menu.main]]
-name = "All posts"
-url = "/posts"
+name = "About me"
+url = "/about"
 weight = 2
 
 [[menu.main]]
-name = "About me"
-url = "/about"
+name = "All posts"
+url = "/posts"
 weight = 3
 
 [[menu.main]]
@@ -46,3 +46,7 @@ name = "Tags"
 url = "/tags"
 weight = 4
 
+[[menu.main]]
+name = "RSS"
+url = "/index.xml"
+weight = 5
