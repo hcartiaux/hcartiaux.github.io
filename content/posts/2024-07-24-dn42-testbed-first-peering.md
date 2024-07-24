@@ -1,6 +1,6 @@
 ---
 title: "[dn42] AS4242420263 configuration - speedrun to the first peering session (Part 2/6)"
-date: 2024-07-25
+date: 2024-07-24
 draft: false
 tags: [homelab, sysadmin, network, dn42]
 toc: true
