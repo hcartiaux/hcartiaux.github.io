@@ -691,7 +691,7 @@ function dn42_export_filter_v6(int link_latency; int link_bandwidth; int link_cr
 
 ### Configure the first BGP peering session
 
-Create one file per BGP peering session:
+Create one file per BGP peering session, the configuration for Kioubit is stored in the file `/etc/bird/bgp_peers/kioubit.dn42`:
 
 * the latency depends on the link, measure it by pinging the neighbor link-local address and set the appropriate value for the BGP community
 * MBGP (Multiprotocol BGP) is supported, bird can create an IPv4 channel and an IPv6 channel in the same BGP session
