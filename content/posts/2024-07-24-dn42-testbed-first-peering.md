@@ -1,5 +1,5 @@
 ---
-title: "[dn42] AS4242420263 configuration - speedrun to the first peering session (Part 2/6)"
+title: "[dn42] AS4242420263 configuration - speedrun to the first peering session (Part 2/5)"
 date: 2024-07-24
 draft: false
 tags: [homelab, sysadmin, network, dn42]
@@ -14,23 +14,22 @@ As a reminder, all my dn42 routers configurations are [backed-up in this github 
 
 ## Network information
 
-
-| ASN          | Block               | Primary nameserver  | Secondary nameserver |
-|--------------|---------------------|---------------------|----------------------|
-| AS4242420263 | fd28:7515:7d51::/48 | fd28:7515:7d51:a::1 | fd28:7515:7d51:c::1  |
-| AS4242420263 | 172.22.144.160/27   | 172.22.144.161      | 172.22.144.177       |
-
+| ASN            | Block                 | Primary name server   | Secondary name server |
+|----------------|-----------------------|-----------------------|-----------------------|
+| `AS4242420263` | `fd28:7515:7d51::/48` | `fd28:7515:7d51:a::1` | `fd28:7515:7d51:c::1` |
+| `AS4242420263` | `172.22.144.160/27`   | `172.22.144.161`      | `172.22.144.177`      |
 
 I've split my blocks in 4 equal size subnets:
 
-| Desc.              | IPv6 Network          | IPv6 Gateway           | IPv4 Network      | IPv4 Gateway      |
-|--------------------|-----------------------|------------------------|-------------------|-------------------|
-| GW1 Interconnect.  | fd28:7515:7d51:a::/64 | fd28:7515:7d51:a::1/64 | 172.22.144.160/29 | 172.22.144.161/29 |
-| GW1 Hosts          | fd28:7515:7d51:b::/64 | fd28:7515:7d51:b::1/64 | 172.22.144.168/29 | 172.22.144.169/29 |
-| GW2 Interconnect.  | fd28:7515:7d51:c::/64 | fd28:7515:7d51:c::1/64 | 172.22.144.176/29 | 172.22.144.177/29 |
-| GW2 Hosts          | fd28:7515:7d51:d::/64 | fd28:7515:7d51:d::1/64 | 172.22.144.184/29 | 172.22.144.185/29 |
+| Desc. | IPv6 Network            | IPv6 Gateway             | IPv4 Network        | IPv4 Gateway        |
+|-------|-------------------------|--------------------------|---------------------|---------------------|
+| `gw`  | `fd28:7515:7d51:a::/64` | `fd28:7515:7d51:a::1/64` | `172.22.144.160/29` | `172.22.144.161/29` |
+| `gw`  | `fd28:7515:7d51:b::/64` | `fd28:7515:7d51:b::1/64` | `172.22.144.168/29` | `172.22.144.169/29` |
+| `gw2` | `fd28:7515:7d51:c::/64` | `fd28:7515:7d51:c::1/64` | `172.22.144.176/29` | `172.22.144.177/29` |
+| `gw2` | `fd28:7515:7d51:d::/64` | `fd28:7515:7d51:d::1/64` | `172.22.144.184/29` | `172.22.144.185/29` |
 
-In this post, I will only describe the GW1 router configuration.
+
+In this post, I will only describe the first `gw` router configuration.
 
 ## First connection
 
@@ -90,7 +89,7 @@ As an example, I will peer with Kioubit. I've followed the instructions to acces
 |--------------------------|-------------------------------------------------|
 | AS-Number                | 4242423914                                      |
 | Endpoint Address         | fr1.g-load.eu:20263                             |
-| WireGuard Public Key     | sLbzTRr2gfLFb24NPzDOpy8j09Y6zI+a7NkeVMdVSR8=    |
+| Wireguard Public Key     | sLbzTRr2gfLFb24NPzDOpy8j09Y6zI+a7NkeVMdVSR8=    |
 | Tunnel IPv6 (Link-Local) | fe80::ade0                                      |
 
 {{< rawhtml >}}
@@ -99,7 +98,7 @@ As an example, I will peer with Kioubit. I've followed the instructions to acces
 
 | **Our Side**             |                                                 |
 |--------------------------|-------------------------------------------------|
-| WireGuard Public Key     | 8JNlIxV5BTOxNBB2wDs/A5HSvzcZxSLbIEVzz7b94Qc=    |
+| Wireguard Public Key     | 8JNlIxV5BTOxNBB2wDs/A5HSvzcZxSLbIEVzz7b94Qc=    |
 | Tunnel IPv6              | fe80::101                                       |
 | Multiprotocol BGP        | Enabled                                         |
 | Extended next hop        | Enabled                                         |
