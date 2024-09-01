@@ -59,13 +59,13 @@ In this post, I will only describe the first `gw` router configuration.
 
 * Install wireguard and its tools
 
-```
+```bash
 apt install wireguard wireguard-tools
 ```
 
 * Generate a set of public and private keys
 
-```
+```bash
 cd /etc/wireguard/
 umask 077; wg genkey | tee privatekey | wg pubkey > publickey
 ```
@@ -156,13 +156,13 @@ AllowedIPs = 172.16.0.0/12, 10.0.0.0/8, fd00::/8, fe80::/10
 
 * Start the tunnel at boot time (and immediately if not started):
 
-```
+```bash
 systemctl enable --now wg-quick@wg-peer-kioubit
 ```
 
 * The tunnel should be established, the lines "latest handshake" and "transfer" will appear and be refreshed.
 
-```
+```bash-session
 wg show wg-peer-kioubit
 interface: wg-peer-kioubit
   public key: 8JNlIxV5BTOxNBB2wDs/A5HSvzcZxSLbIEVzz7b94Qc=
@@ -179,7 +179,7 @@ peer: sLbzTRr2gfLFb24NPzDOpy8j09Y6zI+a7NkeVMdVSR8=
 
 * The network interface `wg-peer-kioubit` is up.
 
-```
+```bash-session
 ip address show dev wg-peer-kioubit
 8: wg-peer-kioubit: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1420 qdisc noqueue state UNKNOWN group default qlen 1000
     link/none 
@@ -189,7 +189,7 @@ ip address show dev wg-peer-kioubit
 
 * The peer link-local IPv6 address is pingable.
 
-```
+```bash-session
 ping -c1  fe80::ade0
 PING fe80::ade0(fe80::ade0) 56 data bytes
 64 bytes from fe80::ade0%wg-peer-kioubit: icmp_seq=1 ttl=64 time=5.20 ms
@@ -214,7 +214,7 @@ rtt min/avg/max/mdev = 5.203/5.203/5.203/0.000 ms
 
 In the next sections, I've compiled information scattered on the dn42 wiki [especially the `bird2` documentation page](https://dn42.eu/howto/Bird2), various [web pages](https://jlu5.com/blog/dn42-multiple-servers-ibgp-igps) and [blog posts](https://mk16.de/blog/dn42-beginner-tips/).
 
-```
+```bash
 apt install bird2
 ```
 
@@ -450,7 +450,7 @@ Refresh the ROA configuration files with a script and systemd timer.
 
 * Create a script `/usr/local/bin/dn42-roa-update.sh` and make it executable (`chmod +x /usr/local/bin/dn42-roa-update.sh`)
 
-```
+```bash
 #!/bin/bash
 roa4URL="https://dn42.burble.com/roa/dn42_roa_bird2_4.conf"
 roa6URL="https://dn42.burble.com/roa/dn42_roa_bird2_6.conf"
@@ -511,7 +511,7 @@ WantedBy=timers.target
 
 * Enable the timer
 
-```
+```bash-session
 systemctl enable --now dn42-roa.timer
 
 systemctl list-timers dn42-roa.timer
@@ -523,7 +523,7 @@ Sat 2024-07-20 15:36:47 CEST 6min left Sat 2024-07-20 15:21:47 CEST 8min ago dn4
 
 * The ROA configuration files are now populated
 
-```
+```bash-session
 wc -l /etc/bird/roa/roa_dn42{,_v6}.conf
   2638 /etc/bird/roa/roa_dn42.conf
   2499 /etc/bird/roa/roa_dn42_v6.conf
@@ -719,13 +719,13 @@ protocol bgp kioubit_v6 from dnpeers {
 
 * Enable the `bird` service
 
-```
+```bash
 systemctl enable --now bird
 ```
 
 * Use `birdc` to query the bird routing daemon state
 
-```
+```bash-session
 birdc show status
 BIRD 2.0.12 ready.
 BIRD 2.0.12
@@ -739,7 +739,7 @@ Daemon is up and running
 
 * Query the status of the peering session with Kioubit
 
-```
+```bash-session
 birdc show protocols all kioubit_v6
 Name       Proto      Table      State  Since         Info
 kioubit_v6 BGP        ---        up     00:21:41.333  Established
@@ -806,13 +806,13 @@ kioubit_v6 BGP        ---        up     00:21:41.333  Established
 
 * Show the routes exchanged with `kioubit` by querying `bird`
 
-```
+```bash
 birdc show route protocol kioubit_v6
 ```
 
 * Check the local routing table of the system, and see all the imported routes
 
-```
+```bash
 ip route | grep -i wg-peer-kioubit
 ```
 
@@ -829,7 +829,7 @@ ip route | grep -i wg-peer-kioubit
 
 Verify that the DNS servers are reachable.
 
-```
+```bash-session
 ip route get fd42:d42:d42:54::1
 fd42:d42:d42:54::1 from :: via fe80::ade0 dev wg-peer-kioubit proto bird src fd28:7515:7d51:a::1 metric 32 pref medium
 
@@ -844,7 +844,7 @@ rtt min/avg/max/mdev = 5.178/5.178/5.178/0.000 ms
 
 Try to query the DNS server
 
-```
+```bash-session
 dig -tAAAA burble.dn42 @fd42:d42:d42:54::1
 
 ; <<>> DiG 9.18.24-1-Debian <<>> -tAAAA burble.dn42 @fd42:d42:d42:54::1
@@ -894,7 +894,7 @@ The login name is your `mntner` name, lowercase, without the `-MNT` suffix (`HCA
 This service can be used:
 
 * to play [Colossal Cave Adventure](https://rickadams.org/adventure/), a piece of computer games history:
-```
+```bash-session
 ssh hcartiaux@shell.fr.burble.dn42
 bsdgames-adventure
 
@@ -920,20 +920,20 @@ down a gully.
 ```
 
 * to host files over http:
-```
+```bash
 ssh hcartiaux@shell.fr.burble.dn42
 mkdir ~/public_html
 echo See you space cowboy > index.html
 ```
 
 In local:
-```
+```bash-session
 curl -k https://shell.fr.burble.dn42/~hcartiaux/
 See you space cowboy
 ```
 
 * to run network commands from other points of the dn42 network
-```
+```bash-session
 ssh hcartiaux@shell.lax.burble.dn42
 tracepath -n fd28:7515:7d51:a::1
  1?: [LOCALHOST]                        0.039ms pmtu 4260
@@ -968,7 +968,7 @@ HOST: shell-lax                   Loss%   Snt   Last   Avg  Best  Wrst StDev
 ```
 
 * to generate traffic with `iperf3`
-```
+```bash-session
 ssh hcartiaux@shell.fr.burble.dn42 iperf3 -s &
 iperf3 -c shell.fr.burble.dn42
 Connecting to host shell.fr.burble.dn42, port 5201

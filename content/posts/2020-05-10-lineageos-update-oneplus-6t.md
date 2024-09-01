@@ -31,7 +31,7 @@ Because of compatibility issues, we need to use [unofficial recovery builds of t
 
 Downloads all these files, and start this procedure:
 
-```bash
+```bash-session
 adb reboot bootloader
 fastboot boot twrp-3.3.1-32-fajita-Pie-mauronofrio.img
 adb shell twrp sideload

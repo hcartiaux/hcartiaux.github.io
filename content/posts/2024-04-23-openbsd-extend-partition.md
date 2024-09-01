@@ -13,7 +13,7 @@ This post is a method to extend the last partition of the disk layout (usually) 
 
 1. Read the disk layout with disklabel
 
-```
+```shell-session
 disklabel -h sd0
 # /dev/rsd0c:
 type: SCSI
@@ -48,13 +48,13 @@ boundend: 41943040
 
 2. We can resize the last partition (here `sd0k`, mounted on `/home`), the max size in sectors is equal to `total sectors` (209715200) - `offset` (30165504).
 
-```
-# disklabel -e sd0
+```shell-session
+disklabel -e sd0
 ```
 
 This command will open the vi text editor, edit the line for `/home`, change the size to the value calculated before, and save.
 
-```
+```shell-session
 # /dev/rsd0c:
 type: SCSI
 disk: SCSI disk
@@ -96,8 +96,8 @@ boundend: 41943040
 3. After saving, the partition size is updated:
 
 
-```
-# disklabel -h sd0
+```shell-session
+disklabel -h sd0
 # /dev/rsd0c:
 type: SCSI
 disk: SCSI disk
@@ -131,8 +131,8 @@ boundend: 41943040
 
 ## Resize the filesystem with `growfs`
 
-```
-# growfs /dev/sd0k
+```shell-session
+growfs /dev/sd0k
 We strongly recommend you to make a backup before growing the Filesystem
 
  Did you backup your data (Yes/No) ? Yes
@@ -148,8 +148,8 @@ super-block backups (for fsck -b #) at:
 
 Check the filesystem and remount it
 
-```
-# fsck_ffs -f /dev/sd0k
+```shell-session
+fsck_ffs -f /dev/sd0k
 ** /dev/rsd0k
 ** Last Mounted on /home
 ** Phase 1 - Check Blocks and Sizes
