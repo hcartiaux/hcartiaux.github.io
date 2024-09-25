@@ -1,7 +1,7 @@
 ---
 title: "Set-up a virtualization server with Debian, KVM/libvirt and IPv6 on a Dedibox (Part 1/2)"
 date: 2024-03-11
-tags: [linux, sysadmin, network, homelab]
+tags: [linux, sysadmin, network, homelab, virtualization]
 toc: true
 ---
 
