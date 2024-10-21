@@ -2,6 +2,7 @@
 title: "Extend a partition on an OpenBSD system"
 date: 2024-05-01
 draft: false
+toc: true
 tags: [openbsd, sysadmin]
 ---
 
@@ -9,12 +10,92 @@ This post is a method to extend the last partition of the disk layout (usually) 
 
 <!--more-->
 
+## Extending the root partition
+
+The root partition cannot be extended on a live system.
+The system must be restarted on a ramdisk.
+
+### With a graphical output/serial console redirection
+
+1. Reboot on the installation ramdisk, on the boot prompt, enter `boot bsd.rd`
+
+```
+>> OpenBSD/amd64 BOOT 3.67
+boot> boot bsd.rd
+```
+
+2. Open a shell
+
+```
+Welcome to the OpenBSD/amd64 7.6 installation program.
+(I)nstall, (U)pgrade, (A)utoinstall or (S)hell? S
+#
+```
+
+3. Create the `/dev/rsd0*` devices
+
+```
+# cd /dev/
+# sh MAKEDEV sd0
+```
+
+4. Skip to the next section [*Extend the disklabel partition layout*](#extend-the-disklabel-partition-layout), then [Resize the filesystem with `growfs`](#resize-the-filesystem-with-growfs) and reboot.
+
+### Headless mode (*should work*)
+
+Here, we will automate the previous section and gather all our luck. 
+
+Create a custom ramdisk, start from [`/bsd.rd`](https://cdn.openbsd.org/pub/OpenBSD/7.6/amd64/bsd.rd) and replace the `.profile` [with this one](https://github.com/goneri/pcib/blob/master/plugins/os/openbsd/files/usr/src/distrib/amd64/ramdisk_growfs/dot.profile).
+
+1. Extract the ramdisk from `/bsd.rd`
+
+```
+# gunzip -k -S "" -o /root/bsd.rd /bsd.rd
+# rdsetroot -x       /root/bsd.rd /root/ramdisk
+```
+
+2. Mount the ramdisk
+
+```
+# vnconfig vnd0 /root/ramdisk
+# mkdir /root/ramdisk.d
+# mount -o nodev,nosuid,noexec /dev/vnd0a /root/ramdisk.d
+```
+
+3. Replace the `.profile` file
+
+```
+# install -m 644 -o root -g wheel -- dot.profile /root/ramdisk.d/.profile"
+```
+
+4. Unmount the ramdisk
+
+```
+# umount /dev/vnd0a
+# vnconfig -u vnd0
+```
+
+5. Create a new ramdisk file `/bsd.gf`
+
+```
+# rdsetroot /root/bsd.rd /root/ramdisk
+# gzip -k -S "" -o /bsd.gf /root/bsd.rd
+```
+
+6. Boot on the patched ramdisk
+
+```
+# echo boot hd0a:/bsd.gf >> /mnt/boot.conf
+```
+
+7. `reboot`
+
 ## Extend the disklabel partition layout
 
 1. Read the disk layout with disklabel
 
 ```shell-session
-disklabel -h sd0
+# disklabel -h sd0
 # /dev/rsd0c:
 type: SCSI
 disk: SCSI disk
@@ -45,11 +126,11 @@ boundend: 41943040
   k:          5750.8M         30165504  4.2BSD   2048 16384 12960 # /home
 ```
 
-
-2. We can resize the last partition (here `sd0k`, mounted on `/home`), the max size in sectors is equal to `total sectors` (209715200) - `offset` (30165504).
+2. We can resize the last partition (here `sd0k`, mounted on `/home`), the max size in sectors is equal to `total sectors` (209715200) - `offset` (30165504). If you are performing this operation on the live system, unmount the partition.
 
 ```shell-session
-disklabel -e sd0
+# umount /home
+# disklabel -e sd0
 ```
 
 This command will open the vi text editor, edit the line for `/home`, change the size to the value calculated before, and save.
@@ -97,7 +178,7 @@ boundend: 41943040
 
 
 ```shell-session
-disklabel -h sd0
+# disklabel -h sd0
 # /dev/rsd0c:
 type: SCSI
 disk: SCSI disk
@@ -132,7 +213,7 @@ boundend: 41943040
 ## Resize the filesystem with `growfs`
 
 ```shell-session
-growfs /dev/sd0k
+# growfs /dev/sd0k
 We strongly recommend you to make a backup before growing the Filesystem
 
  Did you backup your data (Yes/No) ? Yes
@@ -149,7 +230,7 @@ super-block backups (for fsck -b #) at:
 Check the filesystem and remount it
 
 ```shell-session
-fsck_ffs -f /dev/sd0k
+# fsck_ffs -f /dev/sd0k
 ** /dev/rsd0k
 ** Last Mounted on /home
 ** Phase 1 - Check Blocks and Sizes
@@ -163,8 +244,13 @@ MARK FILE SYSTEM CLEAN? [Fyn?] y
 
 
 ***** FILE SYSTEM WAS MODIFIED *****
-shell# mount /home
-shell# df -h /home
+```
+
+Mount the partition and verify its new size.
+
+```
+# mount /home
+# df -h /home
 Filesystem     Size    Used   Avail Capacity  Mounted on
 /dev/sd0k     82.7G   22.0K   78.6G     1%    /home
 ```
