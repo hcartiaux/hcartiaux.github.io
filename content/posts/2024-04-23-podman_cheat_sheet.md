@@ -38,12 +38,14 @@ It can be used alongside with `buildah` to build container images, and `skopeo` 
 
 ## Control a container
 
-* Create a new container: `podman run -dt <image name>`
+* Create a new container and detach it: `podman run -dt <image name>`
+* Create a new container and get an interactive shell: `podman run -it <image name>`
 * Create a new container and map a directory: `-v <host directory>:<container mount point>`
 * Create a new container and map a network port: `-p <host port>:<container port>`
 * Enable Auto-update: `--label io.containers.autoupdate=registry`
 * Checking for updates: `podman auto-update`
 * Copy a file to a container: `podman cp <src> <dest>`
+* Get an interactive shell inside a running container: `podman exec -it <CONTAINER ID> /bin/bash`
 * `podman [restart,start,stop,pause,unpause] <CONTAINER ID>`
 * Remove a container: `podman rm <CONTAINER ID>`
 
