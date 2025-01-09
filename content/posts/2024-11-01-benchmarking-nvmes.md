@@ -274,18 +274,19 @@ Results:
 
 ## Case #2 - Benchmark all 12x NVMEs without RAID (LVM striping)
 
+[![Benchmarks of 12xNVMe drives](bench_nvmex12.png)](bench_nvmex12.png)
+
+Remark: The PERC12 cards are connected to PCI-E Gen4 16x ports, with a bandwidth of 4GB/s per lane, a 16x port has a single direction bandwidth of 32GB/s.
+So the PCI-E ports are not a bottleneck, which is a nice improvement compared to the R750s/PERC 11.
+
 Results:
 
 |                     | Peformance value |
 |---------------------|------------------|
 | Max IOPS            | ~3M              |
 | Max Read bandwidth  | 40GB/s           |
-| Max Write bandwidth | 40GB/s           |
-
-[![Benchmarks of 12xNVMe drives](bench_nvmex12.png)](bench_nvmex12.png)
-
-Remark: The PERC12 cards are connected on PCI-E Gen4 16x ports, with a bandwidth of 4GB/s per lane, a 16x port has a single direction bandwidth of 32GB/s.
-So the PCI-E ports are not a bottleneck, which is a nice improvement compared to the R750s/PERC 11.
+| Max Write bandwidth | 40GB/s           
+|
 
 ## Case #3 - Benchmark the final configuration (2x RAID6 4+2 + LVM striping)
 
@@ -316,7 +317,7 @@ Results:
 
 ## Conclusions
 
-I've not included all generated graphs in the previous sections, only the most relevant ones:
+I've not included all the generated graphs in the previous sections, only the most relevant ones:
 
 * we see a strong impact of the raid controllers on the max IOPs which are capped around 700k
 * the RAID hardware controllers impact all latency measurements. It's useless to use more than 64 threads, the latency explodes above that number
