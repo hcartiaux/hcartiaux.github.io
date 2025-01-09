@@ -281,12 +281,11 @@ So the PCI-E ports are not a bottleneck, which is a nice improvement compared to
 
 Results:
 
-|                     | Peformance value |
+|                    | Peformance value |
 |---------------------|------------------|
 | Max IOPS            | ~3M              |
 | Max Read bandwidth  | 40GB/s           |
-| Max Write bandwidth | 40GB/s           
-|
+| Max Write bandwidth | 40GB/s           |
 
 ## Case #3 - Benchmark the final configuration (2x RAID6 4+2 + LVM striping)
 
