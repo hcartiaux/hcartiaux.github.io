@@ -2,12 +2,14 @@ baseURL = "https://hcartiaux.github.io/"
 languageCode = "en-us"
 title = "My sysadmin notes"
 theme = "archie-solarized"
-paginate = 5
 copyright = "CC BY-SA 4.0"
 pygmentsStyle = "solarized-dark"
 pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
 publishDir = "public"
+
+[pagination]
+  pagerSize = 5
 
 [params]
   mode="toggle" # color-mode → light,dark,toggle or auto
