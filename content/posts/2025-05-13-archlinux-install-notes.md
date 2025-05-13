@@ -22,7 +22,7 @@ I've just received my new `Dell Pro Max 14 MC14250`, and this is my installation
 * Passwords: set an admin password (necessary to boot to an external device or enter BIOS setup), disallow non-admin password changes
 * Disable "SupportAssist Recovery"
 * System Management: disable "OS Agent Requests"
-* Keyboard: disable Fn Lock Mode
+* Keyboard: enable "Fn Lock Mode", choose "Lock Mode Standard"
 * Virtualization: enable Intel TXT
 
 
