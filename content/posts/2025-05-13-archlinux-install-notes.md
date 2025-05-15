@@ -35,7 +35,7 @@ Create an installation media:
 * transfer it on a USB key using dd
 * boot it (F12 for the UEFI boot menu)
 
-### Keymap...
+### Keymap
 
 ```
 loadkeys fr
@@ -235,6 +235,8 @@ And hopefully, boot the new system and login as root
 
 ### Secure Boot
 
+#### Base
+
 ```
 sbctl create-keys
 sbctl enroll-keys -m --firmware-builtin --tpm-eventlog
@@ -245,6 +247,23 @@ sbctl sign --save /efi/EFI/Linux/arch-linux-fallback.efi
 sbctl sign --save /efi/EFI/Linux/arch-linux.efi
 sbctl sign --save /efi/EFI/systemd/systemd-bootx64.efi
 ```
+
+#### Firmware update preparation
+
+Prepare the system for future firmware updates using the command `fwupdmgr`
+
+```
+pacman -S fwupd
+pacman -S shim
+
+sbctl sign -s /usr/lib/fwupd/efi/fwupdx64.efi -o /usr/lib/fwupd/efi/fwupdx64.efi.signed
+cp /usr/share/shim/shimx64.efi /efi/EFI/systemd
+cp /usr/lib/fwupd/efi/fwupdx64.efi /efi/EFI/systemd
+sbctl sign --save /efi/EFI/systemd/fwupdx64.efi
+sbctl sign --save /efi/EFI/systemd/shimx64.efi
+```
+
+#### Reboot
 
 Reboot once again (Secure Boot in deployed mode)
 
@@ -316,6 +335,7 @@ sudo yay -S aconfmgr-git
 mkdir ~/.config/aconfmgr
 cd .config/aconfmgr
 aconfmgr save
+aconfmgr apply
 ```
 
 My configuration is [versioned on github](https://github.com/hcartiaux/aconfmgr).
