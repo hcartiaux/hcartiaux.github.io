@@ -180,10 +180,10 @@ Create
 mkdir -p /efi/EFI/Linux
 ```
 
-Edit `/etc/mkinitcpio.conf`, add these hooks:
+Edit `/etc/mkinitcpio.conf`, add the necessary hooks (`systemd`, `sd-vconsole`, `sd-encrypt`):
 
 ```
-HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole block sd-encrypt lvm2 filesystems fsck)
+HOOKS=(base systemd udev autodetect microcode modconf kms keyboard keymap consolefont sd-vconsole block sd-encrypt filesystems fsck)
 ```
 
 Create a file `/etc/cmdline.d/root.conf`, add this line:
