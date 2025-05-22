@@ -2,7 +2,7 @@
 title: "My Archlinux installation notes"
 date: 2025-05-13
 draft: false
-tags: [archlinux, dell, laptop, uefi, secureboot, tpm2, btrfs]
+tags: [archlinux, linux, laptop, uefi, secureboot, tpm2, btrfs]
 toc: true
 ---
 
