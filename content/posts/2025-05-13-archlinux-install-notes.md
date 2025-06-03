@@ -330,7 +330,7 @@ sudo yay -S aconfmgr-git
 mkdir ~/.config/
 cd ~/.config/
 git clone https://github.com/hcartiaux/aconfmgr.git
-cd ~/aconfmgr
+cd ~/.config/aconfmgr
 aconfmgr apply
 ```
 
