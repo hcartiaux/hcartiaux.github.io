@@ -332,9 +332,10 @@ sudo snapper create --description "Initial set-up"
 
 ```
 sudo yay -S aconfmgr-git
-mkdir ~/.config/aconfmgr
-cd .config/aconfmgr
-aconfmgr save
+mkdir ~/.config/
+cd ~/.config/
+git clone https://github.com/hcartiaux/aconfmgr.git
+cd ~/aconfmgr
 aconfmgr apply
 ```
 
