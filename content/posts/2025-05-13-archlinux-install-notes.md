@@ -186,16 +186,17 @@ Edit `/etc/mkinitcpio.conf`, add the necessary hooks (`systemd`, `sd-vconsole`, 
 HOOKS=(base systemd udev autodetect microcode modconf kms keyboard keymap consolefont sd-vconsole block sd-encrypt filesystems fsck)
 ```
 
-Create a file `/etc/cmdline.d/root.conf`, add this line:
+Pass kernel parameters with files in `/etc/cmdline.d`. First, specify the encrypted root partition.
+Replace the UUID with the output of `blkid | grep '/dev/nvme0n1p2' | sed 's/.*UID="\([^"]*\).*/\1/'`
 
 ```
-root=/dev/mapper/cryptroot rootflags=subvol=/@ rd.luks.name=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX=cryptroot rd.luks.options=discard rw
+root=/dev/mapper/cryptroot rootflags=subvol=/@ rd.luks.name=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX=cryptroot rd.luks.options=discard rw > /etc/cmdline.d/root.conf
 ```
 
 For more security, disable the maintenance shell, add these parameters:
 
 ```
-rd.shell=0 rd.emergency=reboot
+echo rd.shell=0 rd.emergency=reboot > /etc/cmdline.d/default.conf
 ```
 
 Edit `/etc/mkinitcpio.d/linux.preset`:
@@ -271,12 +272,6 @@ Verify the output of `bootctl`.
 
 ### TPM Enroll
 
-Create a recovery key and store it somewhere safe:
-
-```
-systemd-cryptenroll /dev/nvme0n1p2 --recovery-key | tee recovery_key
-```
-
 Enroll the TPM device
 
 ```
@@ -292,7 +287,7 @@ systemd-cryptenroll --wipe-slot=tpm2 /dev/nvme0n1p2 --tpm2-pcrs=0+7
 systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+7 --tpm2-public-key /etc/kernel/pcr-initrd.pub.pem  /dev/nvme0n1p2
 ```
 
-### [AppArmor](https://wiki.archlinux.org/title/AppArmor)
+### Install and enable [AppArmor](https://wiki.archlinux.org/title/AppArmor)
 
 ```
 pacman -S apparmor
