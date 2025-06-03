@@ -174,7 +174,7 @@ Generate the keys used for Secure Boot
 ukify genkey --config=/etc/kernel/uki.conf
 ```
 
-Create
+Create the directory for the UKI files
 
 ```
 mkdir -p /efi/EFI/Linux
