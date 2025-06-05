@@ -43,7 +43,7 @@ loadkeys fr
 
 ### Network
 
-I need a wifi network connection during installation time, I used my 
+I need a wifi network connection during installation time
 
 ```
 iwctl
