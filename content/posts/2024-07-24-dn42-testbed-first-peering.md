@@ -208,6 +208,7 @@ rtt min/avg/max/mdev = 5.203/5.203/5.203/0.000 ms
       dmesg -WHT
       echo module wireguard -p > /sys/kernel/debug/dynamic_debug/control
     ```
+    * if you're still stuck, refer to [Justin Ludwig's blog post "Troubleshooting WireGuard with Tcpdump"](https://www.procustodibus.com/blog/2023/05/troubleshooting-wireguard-with-tcpdump/)
 
 
 ### Install `bird2` (the routing daemon) and a basic configuration
