@@ -10,7 +10,7 @@ Updating from 16.0 to 17.1 on A/B devices without data loss can be tricky, espec
 Here are my upgrade notes.
 <!--more-->
 
-First, ADB and fastboot should be functional [android-tools](https://www.archlinux.org/packages/community/x86_64/android-tools/))
+First, ADB and fastboot should be functional (install [android-tools](https://archlinux.org/packages/extra/x86_64/android-tools/))
 
 An up-to-date Oxygen OS has to be sideloaded on both slots (a/b), this will bring updated firmwares and also, the compatibility with LineageOS 17.1.
 The easiest solution is to sideload the Oxygen OS zip on one slot, and then sideload `copy-partitions.zip` in order to copy Oxygen OS to the other slot.
