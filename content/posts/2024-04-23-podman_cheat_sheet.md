@@ -56,13 +56,6 @@ It can be used alongside with `buildah` to build container images, and `skopeo` 
 * Generate a kube file: `podman generate kube <CONTAINER ID> > <filename>.yaml`
 * Import a kube file: `podman play kube <filename>.yaml`
 
-### Systemd units (*deprecated since podman 4.4*)
-
-* Pre-requisites: `systemctl --user enable podman-restart.service`
-* Generate a systemd service unit: `podman generate systemd --new <CONTAINER ID> > ~/.config/systemd/user/<CONTAINER NAME>.service`
-* Reload systemd: `systemctl --user daemon-reload`
-* Enable the container to start at boot: `systemctl --user enable <CONTAINER NAME>.service`
-
 ### Quadlet
 
 Configuration directories:
@@ -91,9 +84,10 @@ Environment=ENV=prod # Environment variable
 WantedBy=multi-user.target default.target
 ```
 
-* Reload and scan for local changes: `systemctl --user daemon-reload`
-* Show the generated service unit: `systemctl --user cat httpd`
-* Start the container: `systemctl --user start httpd`
+* Reload and scan for local changes: `systemctl [--user] daemon-reload`
+* Show the generated service unit: `systemctl [--user] cat httpd`
+* Validate the Quadlet files: `/usr/lib/podman/quadlet -dryrun --user`
+* Start the container: `systemctl [--user] start httpd`
 
 
 ## External Resources
@@ -107,4 +101,4 @@ WantedBy=multi-user.target default.target
 * https://linuxhandbook.com/autostart-podman-containers/
 * https://mo8it.com/blog/quadlet/
 * https://linuxconfig.org/how-to-run-podman-containers-under-systemd-with-quadlet
-
+* https://wiki.archlinux.org/title/Podman
