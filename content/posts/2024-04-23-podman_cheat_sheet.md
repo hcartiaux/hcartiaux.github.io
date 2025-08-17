@@ -6,12 +6,13 @@ toc: true
 tags: [linux, sysadmin, containers]
 ---
 
-This is a cheat sheet of podman useful information and commands.
+This is a cheat sheet of podman useful information and commands (updated in August 2025).
 
 <!--more-->
 
 Podman is feature equivalent with docker, with the advantage of not requiring root privileges and a daemon running as root.
-It can be used alongside with `buildah` to build container images, and `skopeo` to manage container images in a registry.
+It's also well integrated with `systemd`.
+Podman can be used alongside with `buildah` to build container images, and `skopeo` to manage container images in a registry.
 
 ## Install podman
 
@@ -56,6 +57,56 @@ It can be used alongside with `buildah` to build container images, and `skopeo` 
 * Generate a kube file: `podman generate kube <CONTAINER ID> > <filename>.yaml`
 * Import a kube file: `podman play kube <filename>.yaml`
 
+### Compose
+
+Podman is compatible with `docker compose`, install the package named `podman-compose` and create a file named `compose.yaml`, as an example:
+
+```
+services:
+  intel-llm:
+    image: docker.io/intelanalytics/ipex-llm-inference-cpp-xpu:latest
+    container_name: intel-llm
+    devices:
+      - /dev/dri
+    volumes:
+      - intel-llm:/root/.ollama/models
+    ports:
+      - "127.0.0.1:11434:11434"
+    environment:
+      - HOSTNAME=intel-llm
+      - no_proxy=localhost,127.0.0.1
+      - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_NUM_GPU=999
+      - ZES_ENABLE_SYSMAN=1
+      - OLLAMA_INTEL_GPU=true
+    restart: unless-stopped
+    command: sh -c 'mkdir -p /llm/ollama && cd /llm/ollama && init-ollama && exec ./ollama serve'
+
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: openwebui
+    volumes:
+      - open-webui:/app/backend/data
+    ports:
+      - "127.0.0.1:3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://intel-llm:11434
+      - WEBUI_AUTH=False
+    restart: unless-stopped
+
+volumes:
+  intel-llm:
+  open-webui:
+```
+
+In the same directory:
+
+* Start all containers, and detach: `podman compose up -d`
+* Stop all containers: `podman compose down`
+* Start or stop individual services: `podman compose [start|stop]`
+* List all running containers: `podman compose ps`
+* Get the last logs of the containers: `podman compose logs -f`
+
 ### Quadlet
 
 Configuration directories:
@@ -64,7 +115,7 @@ Configuration directories:
 * `/etc/containers/systemd/`
 * `~/.config/containers/systemd` (*rootless*)
 
-Create a container file, in example in `.config/containers/systemd/httpd.container`:
+Create a container file:
 
 ```
 [Unit]
@@ -73,8 +124,8 @@ After=local-fs.target
 
 [Container]
 Image=docker.io/library/httpd:latest
-#Exec=sleep 1000
 AutoUpdate=registry
+#Exec=sleep 1000
 PublishPort=8080:80 # Port mapping
 Volume=%h/public:/var/www/ # %h is mapped to the user home dir
 Environment=ENV=prod # Environment variable
@@ -84,11 +135,24 @@ Environment=ENV=prod # Environment variable
 WantedBy=multi-user.target default.target
 ```
 
-* Reload and scan for local changes: `systemctl [--user] daemon-reload`
-* Show the generated service unit: `systemctl [--user] cat httpd`
-* Validate the Quadlet files: `/usr/lib/podman/quadlet -dryrun --user`
-* Start the container: `systemctl [--user] start httpd`
+Before podman version 5.6.0, and copy the file manually in `.config/containers/systemd/httpd.container`.
+Starting podman version 5.6.0, do not edit `~/.config/containers/systemd` manually, use [`podman quadlet`](https://docs.podman.io/en/latest/markdown/podman-quadlet.1.html) to manage the quadlet files:
 
+* Install a quadlet file: `podman quadlet install httpd.container`
+* Remove a quadlet file: `podman quadlet rm httpd.container`
+* Print the content of a quadlet file: `podman quadlet print httpd.container` or `systemctl [--user] cat <quadlet name>`
+* List installed quadlets: `podman quadlet list`
+
+Manage the quadlet as a systemd service:
+
+* Reload and scan for local changes: `systemctl [--user] daemon-reload`
+* Validate the quadlet files: `/usr/lib/podman/quadlet -dryrun --user`
+* Start the container: `systemctl [--user] start <quadlet name>`
+* Enable and start the container: `systemctl [--user] enable --now <quadlet name>`
+
+## Clean-up
+
+Clean-up the system of unused files (use with caution): `podman system prune -a [--volumes]`
 
 ## External Resources
 
