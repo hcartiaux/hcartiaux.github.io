@@ -163,7 +163,7 @@ label end
 The program works in 3 steps:
 
 1. loads all the values from I_O and store them in memory
-2. performs a bubble sort, suboptimal - O(n²) - but easy and readable
+2. performs a [bubble sort](https://en.wikipedia.org/wiki/Bubble_sort), suboptimal - O(n²) - but easy and readable
 3. Output the sorted data
 
 ```
@@ -257,6 +257,9 @@ cond_le|64 RAM_PNTR array_size unload
 
 ## Solution of the level `tower of hanoi`
 
+This is a clean implementation of the algorithm given by the game for the famous [Tower of Hanoi problem](https://en.wikipedia.org/wiki/Tower_of_Hanoi),
+using a recursive function with context switching (`push` and `pop` the context to the stack).
+
 ```
 const disk_nr 0
 const src 1
@@ -332,6 +335,8 @@ ret
 ```
 
 ## Solution of the level `water world`
+
+This solution is suboptimal, but it works and permits me to complete the game at 100% :)
 
 ```
 const R0 0
