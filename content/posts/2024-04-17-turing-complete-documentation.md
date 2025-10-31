@@ -47,12 +47,12 @@ Instruction `<op code> <arg1> <arg2> <dest>`
 | 12      | pop                   | `<unused> <unused> <dest>`      | Pop the stack into `<dest>`                     |
 | 13      | call                  | `<unused> <unused> <dest>`      | push PC+4 to the stack and set the PC to `dest` |
 | 14      | ret                   | `<unused> <unused> <unused>`    | pop the stack to the PC                         |
-| 32      | eq                    |                                 | set PC to `<dest>` if `<arg1>` = `<arg2>`       |
-| 33      | neq                   |                                 | set PC to `<dest>` if `<arg1>` != `<arg2>`      |
-| 34      | lt                    |                                 | set PC to `<dest>` if `<arg1>` < `<arg2>`       |
-| 35      | le                    |                                 | set PC to `<dest>` if `<arg1>` <= `<arg2>`      |
-| 36      | gt                    |                                 | set PC to `<dest>` if `<arg1>` > `<arg2>`       |
-| 37      | ge                    |                                 | set PC to `<dest>` if `<arg1>` >= `<arg2>`      |
+| 32      | cond_eq               |                                 | set PC to `<dest>` if `<arg1>` = `<arg2>`       |
+| 33      | cond_neq              |                                 | set PC to `<dest>` if `<arg1>` != `<arg2>`      |
+| 34      | cond_lt               |                                 | set PC to `<dest>` if `<arg1>` < `<arg2>`       |
+| 35      | cond_le               |                                 | set PC to `<dest>` if `<arg1>` <= `<arg2>`      |
+| 36      | cond_gt               |                                 | set PC to `<dest>` if `<arg1>` > `<arg2>`       |
+| 37      | cond_ge               |                                 | set PC to `<dest>` if `<arg1>` >= `<arg2>`      |
 
 ## Addresses
 
@@ -254,3 +254,194 @@ ram_output _ _ I_O
 cond_le|64 RAM_PNTR array_size unload
 ```
 
+
+## Solution of the level `tower of hanoi`
+
+```
+const disk_nr 0
+const src 1
+const dest 2
+const spare 3
+
+const R4 4
+const RAM_COUNTER 5
+const PROGRAM_CNTR 6
+const I_0 7
+
+const _ 0
+const magnet 5
+
+add|64 I_0 0 disk_nr
+add|64 I_0 0 src
+add|64 I_0 0 dest
+add|64 I_0 0 spare
+
+label hanoi
+# if disk_nr == 0
+cond_gt|64 disk_nr 0 else
+call _ _ move
+jump _ _ hanoi_end
+
+label else
+
+## hanoi(disk_nr - 1, source, spare, dest)
+push disk_nr _ _
+push src     _ _
+push dest    _ _
+push spare   _ _
+sub|64 disk_nr 1 disk_nr
+### swap spare and dest
+add|64 spare 0 R4
+add|64 dest 0 spare
+add|64 R4 0 dest
+call _ _ hanoi
+pop _ _ spare
+pop _ _ dest
+pop _ _ src
+pop _ _ disk_nr
+
+### move disk from source to dest
+call _ _ move
+
+## hanoi(disk_nr - 1, spare, dest, source)
+push disk_nr _ _
+push src     _ _
+push dest    _ _
+push spare   _ _
+sub|64 disk_nr 1 disk_nr
+### swap source and spare
+add|64 spare 0 R4
+add|64 src   0 spare
+add|64 R4   0 src
+call _ _ hanoi
+pop _ _ spare
+pop _ _ dest
+pop _ _ src
+pop _ _ disk_nr
+
+label hanoi_end
+ret
+
+
+label move
+add|64     src    0 I_0 # move to spot src
+add|64|128 magnet 0 I_0 # toggle magnet
+add|64 	   dest   0 I_0 # move to spot dest
+add|64|128 magnet 0 I_0 # toggle magnet
+ret
+```
+
+## Solution of the level `water world`
+
+```
+const R0 0
+const leftwall 0
+
+const R1 1
+const rightwall 1
+
+const R2 2
+
+const R3 3
+const IDX 3
+
+const R4 4
+const volume 4
+
+const R5 5
+const RAM_PNTR 5
+
+const PROGRAM_CNTR 6
+const I_O 7
+const arraysize 15
+const _ 0
+
+# Load in memory
+label copy_mem
+ram_input I_O _ _
+add|64 RAM_PNTR 1 RAM_PNTR
+cond_le|64 RAM_PNTR arraysize copy_mem
+
+# Init Registers
+add|64|128 0 0 RAM_PNTR
+add|64   IDX 1 IDX
+
+label main_loop
+call _ _ find_left_wall
+call _ _ find_right_wall
+
+# R2=min(left,right)
+cond_lt leftwall rightwall left_is_smaller
+cond_gt leftwall rightwall right_is_smaller
+jump _ _ left_right_equal
+
+label left_is_smaller
+add|64 leftwall 0 R2
+jump _ _ add_vol
+
+label right_is_smaller
+add|64 rightwall 0 R2
+jump _ _ add_vol
+
+label left_right_equal
+add|64 rightwall 0 R2
+jump _ _ add_vol
+
+# Add to total volume
+label add_vol
+add|64 IDX 0 RAM_PNTR
+ram_output _ _ R1
+sub R2 R1 R2
+add R2 volume volume
+
+add|64 IDX 1 IDX
+cond_lt|64 IDX arraysize main_loop
+
+add|64 volume 0 I_O
+
+label find_left_wall
+push R2  _ _
+push IDX _ _
+
+add|64 IDX 0 RAM_PNTR
+ram_output _ _ leftwall
+
+label find_left_wall_loop
+sub|64 IDX 1 IDX
+add|64 IDX 0 RAM_PNTR
+ram_output _ _ R2
+cond_gt leftwall R2 find_left_wall_loop_continue
+add|64 R2 0 leftwall
+label find_left_wall_loop_continue
+cond_eq|64 IDX 0 find_left_wall_end
+jump _ _ find_left_wall_loop
+label find_left_wall_end
+
+pop _ _ IDX
+pop _ _ R2
+ret
+
+
+label find_right_wall
+push R2  _ _
+push IDX _ _
+
+add|64 IDX 0 RAM_PNTR
+ram_output _ _ rightwall
+
+label find_right_wall_loop
+add|64 IDX 1 IDX
+add|64 IDX 0 RAM_PNTR
+ram_output _ _ R2
+cond_gt rightwall R2 find_right_wall_loop_continue
+add|64 R2 0 rightwall
+label find_right_wall_loop_continue
+cond_eq|64 IDX arraysize find_right_wall_end
+jump _ _ find_right_wall_loop
+label find_right_wall_end
+
+pop _ _ IDX
+pop _ _ R2
+
+ret
+```
