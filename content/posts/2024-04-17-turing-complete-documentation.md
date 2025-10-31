@@ -258,7 +258,7 @@ cond_le|64 RAM_PNTR array_size unload
 ## Solution of the level `tower of hanoi`
 
 This is a clean implementation of the algorithm given by the game for the famous [Tower of Hanoi problem](https://en.wikipedia.org/wiki/Tower_of_Hanoi),
-using a recursive function with context switching (`push` and `pop` the context to the stack).
+using a recursive function with context saving (`push` and `pop` the context to the stack).
 
 ```
 const disk_nr 0
