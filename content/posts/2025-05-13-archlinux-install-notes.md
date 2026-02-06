@@ -190,7 +190,7 @@ Pass kernel parameters with files in `/etc/cmdline.d`. First, specify the encryp
 Replace the UUID with the output of `blkid | grep '/dev/nvme0n1p2' | sed 's/.*UID="\([^"]*\).*/\1/'`
 
 ```
-root=/dev/mapper/cryptroot rootflags=rw,relatime,compress=zstd:3,ssd,space_cache=v2,subvol=/@ rd.luks.name=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX=cryptroot rd.luks.options=discard rw > /etc/cmdline.d/root.conf
+echo root=/dev/mapper/cryptroot rootflags=rw,relatime,compress=zstd:3,ssd,space_cache=v2,subvol=/@ rd.luks.name=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX=cryptroot rd.luks.options=discard rw > /etc/cmdline.d/root.conf
 ```
 
 For more security, disable the maintenance shell, add these parameters:
@@ -344,4 +344,3 @@ My configuration is [versioned on github](https://github.com/hcartiaux/aconfmgr)
 * [UEFI and Secure Boot](https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot)
 * [Snapper](https://wiki.archlinux.org/title/Snapper)
 * [AppArmor](https://wiki.archlinux.org/title/AppArmor)
-
