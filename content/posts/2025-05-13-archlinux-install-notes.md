@@ -328,12 +328,12 @@ sudo snapper create --description "Initial set-up"
 sudo yay -S aconfmgr-git
 mkdir ~/.config/
 cd ~/.config/
-git clone https://github.com/hcartiaux/aconfmgr.git
+git clone https://codeberg.org/hcartiaux/aconfmgr.git
 cd ~/.config/aconfmgr
 aconfmgr apply
 ```
 
-My configuration is [versioned on github](https://github.com/hcartiaux/aconfmgr).
+My configuration is [versioned on codeberg](https://codeberg.org/hcartiaux/aconfmgr).
 
 ## External resources
 
