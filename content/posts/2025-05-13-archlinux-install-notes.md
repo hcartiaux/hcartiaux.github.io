@@ -202,11 +202,9 @@ Edit `/etc/mkinitcpio.d/linux.preset`:
 
 ```
 ALL_kver="/boot/vmlinuz-linux"
-PRESETS=('default' 'fallback')
+PRESETS=('default')
 default_uki="/efi/EFI/Linux/arch-linux.efi"
 default_options="--splash=/usr/share/systemd/bootctl/splash-arch.bmp"
-fallback_uki="/efi/EFI/Linux/arch-linux-fallback.efi"
-fallback_options="-S autodetect"
 ```
 
 Generate the UKIs:
@@ -243,7 +241,6 @@ sbctl enroll-keys -m --firmware-builtin --tpm-eventlog
 sbctl status
 sbctl verify
 sbctl sign --save /efi/EFI/BOOT/BOOTX64.EFI
-sbctl sign --save /efi/EFI/Linux/arch-linux-fallback.efi
 sbctl sign --save /efi/EFI/Linux/arch-linux.efi
 sbctl sign --save /efi/EFI/systemd/systemd-bootx64.efi
 ```
