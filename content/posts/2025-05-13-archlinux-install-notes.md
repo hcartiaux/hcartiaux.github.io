@@ -237,7 +237,7 @@ And hopefully, boot the new system and login as root
 
 ```
 sbctl create-keys
-sbctl enroll-keys -m --firmware-builtin --tpm-eventlog
+sbctl enroll-keys -m
 sbctl status
 sbctl verify
 sbctl sign --save /efi/EFI/BOOT/BOOTX64.EFI
