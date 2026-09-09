@@ -1,5 +1,5 @@
 baseURL = "https://hcartiaux.github.io/"
-languageCode = "en-us"
+locale = "en-us"
 title = "My sysadmin notes"
 theme = "archie-solarized"
 copyright = "CC BY-SA 4.0"
